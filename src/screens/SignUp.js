@@ -1,176 +1,201 @@
 import React from "react"
-import { StyleSheet, Image, Text, View, ImageBackground } from "react-native"
+import { StyleSheet, Image, Text, View, 
+  ImageBackground, 
+  ScrollView, 
+  TextInput, 
+  SafeAreaView, 
+  TouchableOpacity,
+  Dimensions, } from "react-native"
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import Feather from 'react-native-vector-icons/Feather'
 
-export default function SignUp() {
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
+export default function SignUp({navigation}) {
   return (
-    <View style={styles.SignUp}>
-      <View style={styles.Group812}>
-        <Text style={styles.Txt233}>Create Account</Text>
-        <View style={styles.Input}>
-          <Text style={styles.Txt575}>Full Name</Text>
-        </View>
-        <View style={styles.Input2}>
-          <View style={styles.Input1}>
-            <Text style={styles.Txt575}>Password</Text>
-          </View>
-        </View>
-        <Text style={styles.multiple1}>
-          I agree to the UNICEF Terms and Conditions
-        </Text>
-        <View style={styles.Button}>
-          <Text style={styles.Txt836}>Sign Up</Text>
-        </View>
-        <Text style={styles.multiple2}>Already have an account? Sign In</Text>
+    <ScrollView >
+    <SafeAreaView style={styles.container}>
+      
+      <Text style={styles.title}>Create Account</Text>
+
+      <View style={styles.inputView}>
+        <Feather
+          name="user"
+          size={25}
+          
+        />
+        <TextInput 
+          placeholder="Fullname"
+          style={styles.inputText}
+          autoCapitalize="none"
+          />
       </View>
-      <View style={styles.Input3}>
-        <Text style={styles.Txt575}>Email</Text>
+      <View style={styles.inputView}>
+        <Feather
+          name="mail"
+          size={25}
+          
+        />
+        <TextInput 
+          placeholder="Email"
+          style={styles.inputText}
+          autoCapitalize="none"
+          />
       </View>
-    </View>
+      <View style={styles.inputView}>
+        <Feather
+          name="key"
+          size={25}
+          
+        />
+        <TextInput 
+          placeholder="Password"
+          style={styles.inputText}
+          autoCapitalize="none"
+          />
+      </View>
+
+      <View style = {styles.forgotPassView}>
+        <Text style={styles.questionText}>I agree to the UNICEF</Text>
+        <TouchableOpacity>
+            <Text style = {styles.onClickText}> Terms and Conditions</Text>
+          </TouchableOpacity> 
+      </View>
+      
+      <TouchableOpacity style={styles.buttonView}
+        onPress={() => navigation.navigate('SignIn')}>
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
+
+      <View style = {styles.forgotPassView}>
+        <Text style={styles.questionText}>Already have an account?</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('SignIn')}>
+            <Text style = {styles.onClickText}> Sign In</Text>
+          </TouchableOpacity> 
+      </View>
+    </SafeAreaView>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-  SignUp: {
-    display: "flex",
+  container: {
+    flex: 1,
+    //display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
-    alignItems: "flex-start",
-    position: "relative",
-    paddingTop: 177,
-    paddingBottom: 161,
-    paddingLeft: 0,
-    paddingRight: 0,
+    alignItems: "center",
+    
+    paddingLeft: 10,
+    paddingRight: 10,
     backgroundColor: "rgba(41,47,63,1)",
     shadowColor: "rgba(24,48,63,0.5)",
-    elevation: 10,
+    //elevation: 10,
     shadowOffset: { width: 40, height: 40 },
-    width: 411,
-    height: 823,
+    width: windowWidth,
+    height: windowHeight,
   },
-  Group812: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  Txt233: {
+  title: {
     fontSize: 32,
     fontFamily: "Poppins, sans-serif",
     fontWeight: "600",
     color: "rgba(255, 255, 255, 1)",
     textAlign: "center",
     justifyContent: "center",
-    width: 412,
-    marginBottom: 75,
+    width: '100%',
+    height: 60,
+    alignItems: 'center',
+    marginTop: 80,
+    marginBottom: 60,
   },
-  Input: {
+  inputView: {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
+    width: '100%',
+    height: 50,
+    padding: 5, 
+    marginTop: 15,
+    //bottom: 25,
     justifyContent: "flex-start",
-    alignItems: "flex-start",
-    paddingTop: 10,
-    paddingBottom: 14,
-    paddingLeft: 10,
-    paddingRight: 287,
-    marginBottom: 52,
+    alignItems: "center",
+    
     borderRadius: 8,
     backgroundColor: "rgba(255, 255, 255, 1)",
   },
-  Txt575: {
+  inputText: {
     fontSize: 13,
     fontFamily: "Poppins, sans-serif",
     fontWeight: "200",
     color: "rgba(0,0,0,0.74)",
+    width: '90%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    //lineHeight: 20,
+    fontStyle: 'normal',
   },
 
-  Input2: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    paddingTop: 15,
-    paddingBottom: 0,
-    paddingLeft: 0,
-    paddingRight: 0,
-    marginBottom: 76,
+  
+  forgotPassView: {
+    width: '100%',
+    height: 25,
+    marginTop: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
-  Input1: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    paddingTop: 10,
-    paddingBottom: 13,
-    paddingLeft: 10,
-    paddingRight: 291,
-    borderRadius: 8,
-    backgroundColor: "rgba(255, 255, 255, 1)",
-  },
-  Txt575: {
-    fontSize: 13,
+  questionText: {
+    //position: 'absolute',
+    
     fontFamily: "Poppins, sans-serif",
     fontWeight: "200",
-    color: "rgba(0,0,0,0.74)",
-  },
+    fontStyle: 'normal',
+    fontSize: 13,
+    lineHeight: 16,
+    display: 'flex',
+    alignItems: 'center',
+    textAlign: 'center',
 
-  multiple1: {
-    main: "Txt648",
-    seg1: "[object Object]",
-    seg2: "[object Object]",
+    color: '#FFFFFF',
   },
-  Button: {
+  onClickText: {
+    fontFamily: "Poppins, sans-serif",
+    fontWeight: "bold",
+    fontStyle: 'normal',
+    fontSize: 13,
+    lineHeight: 17,
+    display: 'flex',
+    alignItems: 'center',
+    textAlign: 'center',
+
+    color: '#0865D3',
+  },
+  buttonView: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    paddingTop: 7.35,
-    paddingBottom: 11.35,
-    paddingLeft: 32.35,
-    paddingRight: 32.5,
-    marginBottom: 28,
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: 'center',
+    width: '50%',
+    height: 50,
+    //paddingTop: 7,
+    //paddingBottom: 11,
+    //paddingLeft: 32,
+    //paddingRight: 32.15,
+    //marginBottom: 28,
+    marginTop: 36,
     borderRadius: 13.06,
     backgroundColor: "rgba(0,172,131,1)",
   },
-  Txt836: {
-    fontSize: 13.06,
+  buttonText: {
+    fontSize: 16,
     fontFamily: "Poppins, sans-serif",
     fontWeight: "700",
-    color: "rgba(255, 255, 255, 0.98)",
+    color: "rgba(255, 255, 255, 1)",
     textAlign: "center",
     justifyContent: "center",
-    width: 146,
-    height: 27,
-  },
-
-  multiple2: {
-    main: "Txt374",
-    seg1: "[object Object]",
-    seg2: "[object Object]",
-    seg3: "[object Object]",
-  },
-
-  Input3: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    position: "absolute",
-    top: "43.62%",
-    bottom: "51.03%",
-    left: "5.84%",
-    right: "5.84%",
-    paddingTop: 9,
-    paddingBottom: 12,
-    paddingLeft: 10,
-    paddingRight: 316,
-    borderRadius: 8,
-    backgroundColor: "rgba(255, 255, 255, 1)",
-    width: 363,
-    height: 44,
-  },
-  Txt575: {
-    fontSize: 13,
-    fontFamily: "Poppins, sans-serif",
-    fontWeight: "200",
-    color: "rgba(0,0,0,0.74)",
+    alignItems: 'center',
+    textTransform: 'uppercase',
+    //backgroundColor: '#000',
   },
 })

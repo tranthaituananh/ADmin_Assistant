@@ -1,134 +1,190 @@
 import React from "react"
-import { StyleSheet, Image, Text, View, ImageBackground } from "react-native"
+import { StyleSheet, 
+  Image, Text, View, 
+  ImageBackground,
+  ScrollView, 
+  TextInput,
+  Dimensions, 
+  SafeAreaView,
+  TouchableOpacity,} from "react-native"
 
-export default function Chat() {
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
+
+export default function Chat({navigation}) {
   return (
-    <View style={styles.Chat}>
-      <View style={styles.Group138}>
-        <View style={styles.Group869}>
-          <Image
-            style={styles.Group}
-            source={{
-              uri: "https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A132?alt=media&token=a3d24d05-a29e-4d41-9c65-394308556e94",
-            }}
-          />
-          <Text style={styles.Txt553}>Trần Thái Tuấn Anh</Text>
-        </View>
-        <View style={styles.Group142}>
-          <View style={styles.Group567}>
-            <Text style={styles.Txt719}>Write</Text>
-          </View>
-          <View style={styles.Group449}>
-            <Image
-              style={styles.MdiMicrophone}
-              source={{
-                uri: "https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A136?alt=media&token=7fcbcd40-be32-4f1a-9000-0e1b124d3de2",
-              }}
-            />
-          </View>
-          <View style={styles.Group161}>
-            <Image
-              style={styles.Subtract}
-              source={{
-                uri: "https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A113?alt=media&token=59ce58d5-54e1-4843-a1ff-6f53d2a75f8b",
-              }}
-            />
-          </View>
-        </View>
+    
+    <SafeAreaView style={styles.container}>
+      
+      <View style={styles.grpTitleView}>
+        <Image
+          style={styles.avatar}
+          source={{
+            uri: "https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A132?alt=media&token=a3d24d05-a29e-4d41-9c65-394308556e94",
+          }}
+        />
+        <Text style={styles.userName}>Trần Thái Tuấn Anh</Text>
       </View>
-      <Image
-        style={styles.Group7}
-        source={{
-          uri: "https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A119?alt=media&token=83d60199-0897-47d4-a189-83080290f804",
-        }}
-      />
-    </View>
+      
+      <ScrollView>
+      <View style = {styles.chatFrameView}>
+          <Text>Data</Text>
+      </View>
+      </ScrollView>
+
+      <View style={styles.grpFeatureView}>
+        <View style={styles.inputView}>
+          <TextInput 
+            placeholder="Write"
+            placeholderTextColor={'rgba(255, 255, 255, 0.55)'}
+            style={styles.inputText}
+            color='#fff'
+            />
+          <TouchableOpacity>
+            <Image
+              style={styles.buttonSentImg}
+              source={{
+                uri: "https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A119?alt=media&token=83d60199-0897-47d4-a189-83080290f804",
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity style={styles.buttonFeature}
+          onPress={() => navigation.navigate('Voice')}>
+          <Image
+            style={styles.MdiMicrophone}
+            source={{
+              uri: "https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A136?alt=media&token=7fcbcd40-be32-4f1a-9000-0e1b124d3de2",
+            }}
+            resizeMode = 'center'
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.buttonFeature}
+          onPress={() => navigation.navigate('SignUp')}>
+          <Image
+            style={styles.cameraImg}
+            source={{
+              uri: "https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A113?alt=media&token=59ce58d5-54e1-4843-a1ff-6f53d2a75f8b",
+            }}
+            resizeMode = 'center'
+          />
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+    
   )
 }
 
 const styles = StyleSheet.create({
-  Chat: {
-    display: "flex",
+  container: {
+    flex: 1,
+    //display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
-    alignItems: "flex-start",
-    position: "relative",
-    paddingTop: 50,
-    paddingBottom: 63,
-    paddingLeft: 30,
-    paddingRight: 30,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
     backgroundColor: "rgba(41,47,63,1)",
     shadowColor: "rgba(24,48,63,0.5)",
-    elevation: 10,
+    //elevation: 10,
     shadowOffset: { width: 40, height: 40 },
-    width: 411,
-    height: 823,
+    width: windowWidth,
+    height: windowHeight,
   },
-  Group138: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  Group869: {
+  grpTitleView: {
     display: "flex",
     flexDirection: "row",
-    alignItems: "flex-end",
-    marginBottom: 623,
+    alignItems: "center",
+    //paddingTop: 5,
+    width: '100%',
+    height: 50,
+    justifyContent: 'flex-start',
+    //backgroundColor: '#fff',
+    //marginBottom: 623,
   },
-  Group: {
+  avatar: {
     width: 45,
     height: 45,
-    marginRight: 114,
+    //marginLeft: 5,
+    //justifyContent: 'flex-start'
+    //marginRight: 114,
   },
-  Txt553: {
+  userName: {
     fontSize: 15,
     fontFamily: "Roboto, sans-serif",
     fontWeight: "400",
     letterSpacing: 1,
     color: "rgba(255, 255, 255, 1)",
     textAlign: "right",
+    left: 0.3 * windowWidth,
     justifyContent: "flex-end",
+    //alignItems: 'flex-end',
     textTransform: "capitalize",
   },
+  chatFrameView: {
+    //display:'flex',
+    width: '100%',
+    height: '80%',
+    //backgroundColor: "rgba(41,47,63,1)",
+  },
 
-  Group142: {
+  grpFeatureView: {
     display: "flex",
     flexDirection: "row",
+    width: '100%',
+    height: 45,
+    marginBottom: 5,
   },
-  Group567: {
-    paddingTop: 10,
-    paddingBottom: 11,
-    paddingLeft: 22,
-    paddingRight: 195,
+  inputView: {
+    //paddingTop: 10,
+    //paddingBottom: 11,
+    paddingLeft: 10,
+    //paddingRight: 2,
+    //padding: 7,
+    marginLeft: 3,
     marginRight: 7,
     borderRadius: 10,
     backgroundColor: "rgba(0,0,0,0.25)",
-    width: 255,
-    height: 40,
+    width: '70%',
+    height: 42,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems:'center',
   },
-  Txt719: {
+  inputText: {
     fontSize: 14,
     fontFamily: "Helvetica, sans-serif",
     fontWeight: "400",
     letterSpacing: 1,
     color: "rgba(255, 255, 255, 0.6)",
-    width: 36,
-    height: 17,
+    width: '80%',
+    height: '100%',
+    textAlign: 'left',
+    justifyContent: 'center',
+    marginRight: 8,
   },
 
-  Group449: {
-    paddingTop: 11,
-    paddingBottom: 11,
-    paddingLeft: 11,
-    paddingRight: 12,
+  buttonFeature: {
+    //paddingTop: 11,
+    //paddingBottom: 11,
+    //paddingLeft: 11,
+    //paddingRight: 12,
     marginRight: 7,
     borderRadius: 10,
     backgroundColor: "rgba(0,172,131,1)",
+    justifyContent: 'center',
+    alignItems: 'center',
     width: 40,
     height: 40,
   },
+
   MdiMicrophone: {
-    width: 15,
-    height: 16,
+    width: 18,
+    height: 18,
   },
 
   Group161: {
@@ -141,16 +197,14 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   },
-  Subtract: {
-    width: 18,
-    height: 16,
+  cameraImg: {
+    width: 20,
+    height: 18,
   },
 
-  Group7: {
-    position: "absolute",
-    top: 719,
-    left: 246,
+  buttonSentImg: {
+    //position: "absolute",
     width: 40,
-    height: 40,
+    height: 40,    
   },
 })

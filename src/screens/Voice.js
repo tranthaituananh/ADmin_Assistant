@@ -1,46 +1,54 @@
 import React from "react"
-import { StyleSheet, Image, Text, View, ImageBackground } from "react-native"
+import { StyleSheet, Image, Text, View, ImageBackground,
+SafeAreaView,
+Dimensions,
+ScrollView, 
+TouchableOpacity, } from "react-native"
 
-export default function Voice() {
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
+export default function Voice({navigation}) {
   return (
-    <View style={styles.Voice}>
-      <View style={styles.Group4710}>
+    <SafeAreaView style={styles.container}>
+      
         <Image
           style={styles.IconoirVoice}
-          source={{ uri: "image unavailable" }}
+          
         />
-        <View style={styles.Group131}>
+        <TouchableOpacity style={styles.buttonMic}
+          onPress={() => navigation.navigate('Chat')}>
           <Image
             style={styles.MdiMicrophone}
-            source={{ uri: "image unavailable" }}
+            source={{ uri: "https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A136?alt=media&token=7fcbcd40-be32-4f1a-9000-0e1b124d3de2", }}
+            resizeMode='stretch'            
           />
-        </View>
-      </View>
+        </TouchableOpacity>
       <Image
         style={styles.IconoirVoice1}
         source={{ uri: "image unavailable" }}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  Voice: {
-    display: "flex",
+  container: {
+    flex: 1,
+    //display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
-    alignItems: "flex-start",
-    position: "relative",
-    paddingTop: 276,
-    paddingBottom: 103,
-    paddingLeft: 47,
-    paddingRight: 82,
+    alignItems: "center",
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
     backgroundColor: "rgba(41,47,63,1)",
     shadowColor: "rgba(24,48,63,0.5)",
-    elevation: 10,
+    //elevation: 10,
     shadowOffset: { width: 40, height: 40 },
-    width: 411,
-    height: 823,
+    width: windowWidth,
+    height: windowHeight,
   },
   Group4710: {
     display: "flex",
@@ -53,15 +61,18 @@ const styles = StyleSheet.create({
     marginBottom: 100,
     marginLeft: 15,
   },
-  Group131: {
-    paddingTop: 24,
-    paddingBottom: 24,
-    paddingLeft: 24,
-    paddingRight: 24,
+  buttonMic: {
+    //paddingTop: 24,
+    //paddingBottom: 24,
+    //paddingLeft: 24,
+    //paddingRight: 24,
     borderRadius: 10,
     backgroundColor: "rgba(0,172,131,1)",
     width: 80,
     height: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
   },
   MdiMicrophone: {
     width: 30,
