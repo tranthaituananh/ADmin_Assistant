@@ -114,7 +114,7 @@ const SignUp = props => {
         ) : null}
 
         <View style={styles.forgotPassView}>
-          <Text style={styles.questionText}>I agree to the UNICEF</Text>
+          <Text style={styles.questionText}>I agree to the ADmin Assistant</Text>
           <TouchableOpacity>
             <Text style={styles.onClickText}> Terms and Conditions</Text>
           </TouchableOpacity>
