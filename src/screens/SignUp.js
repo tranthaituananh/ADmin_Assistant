@@ -107,25 +107,11 @@ const SignUp = props => {
           />
         </View>
 
-<<<<<<< HEAD
         {error ? (
           <View style={styles.errorLabelContainerStyle}>
             <Text style={styles.errorTextStyle}>{error}</Text>
           </View>
         ) : null}
-=======
-      <View style = {styles.forgotPassView}>
-        <Text style={styles.questionText}>I agree to ADmin Assistant</Text>
-        <TouchableOpacity>
-            <Text style = {styles.onClickText}> Terms and Conditions</Text>
-          </TouchableOpacity> 
-      </View>
-      
-      <TouchableOpacity style={styles.buttonView}
-        onPress={() => navigation.navigate('SignIn')}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
->>>>>>> 985bc364243723344c1e4762bba76977958e5587
 
         <View style={styles.forgotPassView}>
           <Text style={styles.questionText}>I agree to the UNICEF</Text>
