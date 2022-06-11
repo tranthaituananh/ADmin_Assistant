@@ -48,9 +48,27 @@ export default class Voice extends Component {
   }
   componentDidMount() {
     /// Handle commands from Alan Studio
-    alanEventEmitter.addListener('onCommand', data => {
-      console.log(`onCommand: ${JSON.stringify(data)}`);
+
+    alanEventEmitter.addListener('onEvent', payload => {
+      let eventObj = JSON.parse(payload);
+      switch (eventObj.name) {
+        case 'recognized':
+          console.info('Interim results:', eventObj.text);
+          break;
+        case 'parsed':
+          console.info('Final result:', eventObj.text);
+          break;
+        case 'text':
+          console.info('Alan reponse:', eventObj.text);
+          break;
+        default:
+          console.info('Unknown event');
+      }
     });
+    // alanEventEmitter.addListener(
+    //   'onCommand', data => {
+    //   console.log(`onCommand: ${JSON.stringify(data)}`);
+    // });
   }
 
   componentWillUnmount() {

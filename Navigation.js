@@ -8,6 +8,7 @@ import Voice from './src/screens/Voice';
 import Chat from './src/screens/Chat';
 import ForgotPassword from './src/screens/ForgotPassword';
 import ResetPassword from './src/screens/ResetPassword';
+import Loading from './src/screens/Loading';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,8 +16,9 @@ const Navigation = props => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="SignIn"
+        initialRouteName="Loading"
         screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Loading" component={Loading} />
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Chat" component={Chat} />

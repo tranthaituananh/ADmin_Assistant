@@ -11,11 +11,14 @@ import {
   TouchableOpacity,
   Dimensions,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 
 import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
+import uuid from 'react-native-uuid';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -50,7 +53,24 @@ const SignUp = props => {
       return;
     }
 
-    __doCreateUser(email, password);
+    __doCreateUser(email, password).then(savedUser);
+  };
+
+  const savedUser = async () => {
+    if (name == '' || email == '' || password == '') {
+      ToastAndroid.show('Please fill in all the fields!', ToastAndroid.SHORT);
+      return false;
+    }
+    let data = {
+      id: uuid.v4(),
+      name: name,
+      email: email,
+      password: password,
+    };
+    database()
+      .ref('/users/' + data.uuid)
+      .set(data)
+      .then(ToastAndroid.show('Register successfully!', ToastAndroid.SHORT));
   };
 
   const __doCreateUser = async (email, password) => {
@@ -104,6 +124,7 @@ const SignUp = props => {
             value={password}
             error={isValid}
             onChangeText={text => setPassword(text)}
+            secureTextEntry
           />
         </View>
 
@@ -114,7 +135,7 @@ const SignUp = props => {
         ) : null}
 
         <View style={styles.forgotPassView}>
-          <Text style={styles.questionText}>I agree to the ADmin Assistant</Text>
+          <Text style={styles.questionText}>I agree to the UNICEF</Text>
           <TouchableOpacity>
             <Text style={styles.onClickText}> Terms and Conditions</Text>
           </TouchableOpacity>

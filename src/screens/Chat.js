@@ -1,4 +1,10 @@
-import React, {Component} from 'react';
+import React, {
+  Component,
+  useCallback,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 import {
   StyleSheet,
   Image,
@@ -13,105 +19,347 @@ import {
 } from 'react-native';
 
 import {AlanView} from '@alan-ai/alan-sdk-react-native';
-
 import {NativeEventEmitter, NativeModules} from 'react-native';
+import Message from './component/Message';
+import database from '@react-native-firebase/database';
+import uuid from 'react-native-uuid';
 
 const {AlanManager, AlanEventEmitter} = NativeModules;
 const alanEventEmitter = new NativeEventEmitter(AlanEventEmitter);
 
+// const alanKey =
+//   '199226a56da7867b6331396deeb36eb22e956eca572e1d8b807a3e2338fdd0dc/stage';
+
 const alanKey =
-  '199226a56da7867b6331396deeb36eb22e956eca572e1d8b807a3e2338fdd0dc/stage';
+  '087ceaf34fe1d0396eac8ce8d828fcfd2e956eca572e1d8b807a3e2338fdd0dc/stage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default class Chat extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      messages: [],
-      inputBarText: '',
-      results: null,
-    };
-  }
-  render() {
-    return (
-      <SafeAreaView style={styles.container}>
+const Chat = () => {
+  const [name, setName] = useState();
+  const getFullname = () => {
+    database()
+      .ref('/users/' + uuid.v4())
+      .once('value')
+      .then(snapshot => {
+        console.log('User data: ', snapshot.val());
+      });
+  };
+  useEffect(() => {
+    getFullname();
+  });
+  const [result, setResult] = useState({
+    user: 0,
+    //time: 0,
+    content: null,
+  });
+  const [messages, setMessages] = useState([]);
+  const [isLeft, setIsLeft] = useState(true);
+  const [inputText, setInputText] = useState('');
+
+  const user = useRef(0);
+  const scrollView = useRef();
+  //const time = new Date().getTime;
+
+  // const getMessages = () => {
+  //   messages.map((message, index) => (
+  //     <Message
+  //       key={index}
+  //       time={message.time}
+  //       isLeft={message.user !== user.current}
+  //       message={message.content}
+  //     />
+  //   ));
+  // };
+
+  const _rmAlanEvent = () => {
+    alanEventEmitter.removeAllListeners('onEvent');
+    console.log('deleted!');
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.grpTitleView}>
+        <Image
+          style={styles.avatar}
+          source={{
+            uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A132?alt=media&token=a3d24d05-a29e-4d41-9c65-394308556e94',
+          }}
+        />
+        <Text style={styles.userName}>My Dung</Text>
+      </View>
+
+      <ScrollView
+        style={styles.chatFrameView}
+        ref={ref => (scrollView.current = ref)}
+        onContentChange={() => {
+          scrollView.current.scrollToEnd({animated: true});
+        }}>
         <AlanView projectid={alanKey} />
-        <View style={styles.grpTitleView}>
-          <Image
-            style={styles.avatar}
-            source={{
-              uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A132?alt=media&token=a3d24d05-a29e-4d41-9c65-394308556e94',
-            }}
+
+        {useEffect(() => {
+          alanEventEmitter.addListener('onCommand', data => {
+            console.log(`onCommand: ${JSON.stringify(data)}`);
+          });
+          alanEventEmitter.addListener('onEvent', payload => {
+            let eventObj = JSON.parse(payload);
+
+            switch (eventObj.name) {
+              case 'recognized':
+                console.info('Interim results:', eventObj.text);
+                break;
+              case 'parsed':
+                console.info('Final result:', eventObj.text);
+                messages.push({
+                  user: 0,
+                  //time:
+                  content: eventObj.text,
+                });
+
+                break;
+              case 'text':
+                console.info('Alan reponse:', eventObj.text);
+                messages.push({
+                  user: 1,
+                  //time:
+                  content: eventObj.text,
+                });
+                break;
+              default:
+                console.info('Unknown event');
+            }
+          });
+          return () => {
+            alanEventEmitter.removeAllListeners('onEvent');
+            //messages.splice(0, messages.length);
+          };
+        }, [])}
+        {messages.map((message, index) => (
+          <Message
+            key={index}
+            time={message.time}
+            isLeft={message.user !== user.current}
+            message={message.content}
           />
-          <Text style={styles.userName}>Trần Thái Tuấn Anh</Text>
-        </View>
+        ))}
+        {console.log(messages)}
+      </ScrollView>
 
-        <ScrollView>
-          <View style={styles.chatFrameView}>
-            <Text>Data</Text>
-          </View>
-        </ScrollView>
-
-        <View style={styles.grpFeatureView}>
-          <View style={styles.inputView}>
-            <TextInput
-              placeholder="Write"
-              placeholderTextColor={'rgba(255, 255, 255, 0.55)'}
-              style={styles.inputText}
-              color="#fff"
-            />
-            <TouchableOpacity>
-              <Image
-                style={styles.buttonSentImg}
-                source={{
-                  uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A119?alt=media&token=83d60199-0897-47d4-a189-83080290f804',
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-
+      <View style={styles.grpFeatureView}>
+        <View style={styles.inputView}>
+          <TextInput
+            placeholder="Write"
+            placeholderTextColor={'rgba(255, 255, 255, 0.55)'}
+            style={styles.inputText}
+            color="#fff"
+            //value={messages}
+            onChangeText={text => setInputText(text)}
+          />
           <TouchableOpacity
-            style={styles.buttonFeature}
-            // onPress={() => this.props.navigation.navigate('Voice')}
-          >
+            onPress={() => {
+              messages.push({user: 0, content: inputText});
+            }}>
             <Image
-              style={styles.MdiMicrophone}
+              style={styles.buttonSentImg}
               source={{
-                uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A136?alt=media&token=7fcbcd40-be32-4f1a-9000-0e1b124d3de2',
+                uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A119?alt=media&token=83d60199-0897-47d4-a189-83080290f804',
               }}
-              resizeMode="center"
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.buttonFeature}
-            onPress={() => this.props.navigation.navigate('SignUp')}>
-            <Image
-              style={styles.cameraImg}
-              source={{
-                uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A113?alt=media&token=59ce58d5-54e1-4843-a1ff-6f53d2a75f8b',
-              }}
-              resizeMode="center"
             />
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
-    );
-  }
 
-  componentDidMount() {
-    /// Handle commands from Alan Studio
-    alanEventEmitter.addListener('onCommand', data => {
-      console.log(`onCommand: ${JSON.stringify(data)}`);
-    });
-  }
+        {/* <TouchableOpacity
+          style={styles.buttonFeature}
+          // onPress={() => this.props.navigation.navigate('Voice')}
+        >
+          <Image
+            style={styles.MdiMicrophone}
+            source={{
+              uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A136?alt=media&token=7fcbcd40-be32-4f1a-9000-0e1b124d3de2',
+            }}
+            resizeMode="center"
+          />
+        </TouchableOpacity> */}
 
-  componentWillUnmount() {
-    alanEventEmitter.removeAllListeners('onCommand');
-  }
-}
+        <TouchableOpacity
+          style={styles.buttonFeature}
+          onPress={() => this.props.navigation.navigate('SignUp')}>
+          <Image
+            style={styles.cameraImg}
+            source={{
+              uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A113?alt=media&token=59ce58d5-54e1-4843-a1ff-6f53d2a75f8b',
+            }}
+            resizeMode="center"
+          />
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default Chat;
+
+// export default class Chat extends Component<Props> {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       messages: [],
+//       inputBarText: '',
+//       results: null,
+//     };
+//   }
+//   render() {
+//     var messages = [];
+
+//     this.state.messages.forEach(function (message, index) {
+//       messages.push(
+//         <MessageBubble
+//           key={index}
+//           direction={message.direction}
+//           text={message.text}
+//         />,
+//       );
+//     });
+
+//     return (
+//       <SafeAreaView style={styles.container}>
+//         <AlanView projectid={alanKey} />
+//         <View style={styles.grpTitleView}>
+//           <Image
+//             style={styles.avatar}
+//             source={{
+//               uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A132?alt=media&token=a3d24d05-a29e-4d41-9c65-394308556e94',
+//             }}
+//           />
+//           <Text style={styles.userName}>Trần Thái Tuấn Anh</Text>
+//         </View>
+
+//         <ScrollView>
+//           <View style={styles.chatFrameView}>{messages}</View>
+//         </ScrollView>
+
+//         <View style={styles.grpFeatureView}>
+//           <View style={styles.inputView}>
+//             <TextInput
+//               placeholder="Write"
+//               placeholderTextColor={'rgba(255, 255, 255, 0.55)'}
+//               style={styles.inputText}
+//               color="#fff"
+//             />
+//             <TouchableOpacity>
+//               <Image
+//                 style={styles.buttonSentImg}
+//                 source={{
+//                   uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A119?alt=media&token=83d60199-0897-47d4-a189-83080290f804',
+//                 }}
+//               />
+//             </TouchableOpacity>
+//           </View>
+
+//           <TouchableOpacity
+//             style={styles.buttonFeature}
+//             // onPress={() => this.props.navigation.navigate('Voice')}
+//           >
+//             <Image
+//               style={styles.MdiMicrophone}
+//               source={{
+//                 uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A136?alt=media&token=7fcbcd40-be32-4f1a-9000-0e1b124d3de2',
+//               }}
+//               resizeMode="center"
+//             />
+//           </TouchableOpacity>
+
+//           <TouchableOpacity
+//             style={styles.buttonFeature}
+//             onPress={() => this.props.navigation.navigate('SignUp')}>
+//             <Image
+//               style={styles.cameraImg}
+//               source={{
+//                 uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A113?alt=media&token=59ce58d5-54e1-4843-a1ff-6f53d2a75f8b',
+//               }}
+//               resizeMode="center"
+//             />
+//           </TouchableOpacity>
+//         </View>
+//       </SafeAreaView>
+//     );
+//   }
+
+//   componentDidMount() {
+//     /// Handle commands from Alan Studio
+
+//     alanEventEmitter.addListener('onEvent', payload => {
+//       let eventObj = JSON.parse(payload);
+//       switch (eventObj.name) {
+//         case 'recognized':
+//           console.info('Interim results:', eventObj.text);
+//           break;
+//         case 'parsed':
+//           console.info('Final result:', eventObj.text);
+//           this.setState({results: eventObj.text});
+//           this._sendMessage(this.state.results, 1);
+//           break;
+//         case 'text':
+//           console.info('Alan reponse:', eventObj.text);
+//           this.setState({results: eventObj.text});
+//           this._sendMessage(this.state.results, 2);
+//           break;
+//         default:
+//           console.info('Unknown event');
+//       }
+//     });
+//     // alanEventEmitter.addListener(
+//     //   'onCommand', data => {
+//     //   console.log(`onCommand: ${JSON.stringify(data)}`);
+//     // });
+//   }
+
+//   componentWillUnmount() {
+//     alanEventEmitter.removeAllListeners('onCommand');
+//   }
+
+//   _sendMessage(msg, type) {
+//     if (type == 1) {
+//       this.state.messages.push({direction: 'right', text: msg});
+//     } else {
+//       this.state.messages.push({direction: 'left', text: msg});
+//     }
+
+//     this.setState({
+//       messages: this.state.messages,
+//     });
+//   }
+// }
+
+// class MessageBubble extends Component {
+//   render() {
+//     var leftSpacer =
+//       this.props.direction === 'left' ? null : <View style={{width: 70}} />;
+//     var rightSpacer =
+//       this.props.direction === 'left' ? <View style={{width: 70}} /> : null;
+
+//     var bubbleStyles =
+//       this.props.direction === 'left'
+//         ? [styles.messageBubble, styles.messageBubbleLeft]
+//         : [styles.messageBubble, styles.messageBubbleRight];
+
+//     var bubbleTextStyle =
+//       this.props.direction === 'left'
+//         ? styles.messageBubbleTextLeft
+//         : styles.messageBubbleTextRight;
+
+//     return (
+//       <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+//         {leftSpacer}
+//         <View style={bubbleStyles}>
+//           <Text style={bubbleTextStyle}>{this.props.text}</Text>
+//         </View>
+//         {rightSpacer}
+//       </View>
+//     );
+//   }
+// }
 
 const styles = StyleSheet.create({
   container: {
@@ -172,7 +420,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-    height: 45,
+    height: 40,
     marginBottom: 5,
   },
   inputView: {
@@ -242,5 +490,34 @@ const styles = StyleSheet.create({
     //position: "absolute",
     width: 40,
     height: 40,
+  },
+
+  //MessageBubble
+
+  messageBubble: {
+    borderRadius: 5,
+    marginTop: 8,
+    marginRight: 10,
+    marginLeft: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    flexDirection: 'row',
+    flex: 1,
+  },
+
+  messageBubbleLeft: {
+    backgroundColor: '#d5d8d4',
+  },
+
+  messageBubbleTextLeft: {
+    color: 'black',
+  },
+
+  messageBubbleRight: {
+    backgroundColor: '#66db30',
+  },
+
+  messageBubbleTextRight: {
+    color: 'white',
   },
 });

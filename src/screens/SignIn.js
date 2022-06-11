@@ -93,13 +93,14 @@ const SignIn = props => {
             value={password}
             onChangeText={text => setPassword(text)}
             error={isValid}
+            secureTextEntry
           />
         </View>
 
         <View style={styles.questionView}>
           <Text style={styles.questionText}>Forgot Password?</Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate('ForgotPassword')}>
+            onPress={() => props.navigation.navigate('ForgotPassword')}>
             <Text style={styles.onClickText}> Click Here</Text>
           </TouchableOpacity>
         </View>
@@ -110,7 +111,7 @@ const SignIn = props => {
 
         <View style={styles.questionView}>
           <Text style={styles.questionText}>Don’t have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+          <TouchableOpacity onPress={() => props.navigation.navigate('SignUp')}>
             <Text style={styles.onClickText}> Sign Up</Text>
           </TouchableOpacity>
         </View>
