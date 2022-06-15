@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, {Component, useEffect, useState} from 'react';
+=======
+import React, {Component} from 'react';
+>>>>>>> 53c0c4cfc40725a432ee07cd14322b9f844e2439
 import {
   StyleSheet,
   Image,
@@ -9,10 +13,13 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+<<<<<<< HEAD
   Button,
   Linking,
   Alert,
   Platform,
+=======
+>>>>>>> 53c0c4cfc40725a432ee07cd14322b9f844e2439
 } from 'react-native';
 
 import {AlanView} from '@alan-ai/alan-sdk-react-native';
@@ -26,6 +33,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const alanKey =
+<<<<<<< HEAD
   '087ceaf34fe1d0396eac8ce8d828fcfd2e956eca572e1d8b807a3e2338fdd0dc/stage';
 
 const number = '+84 795164691';
@@ -193,6 +201,61 @@ const Voice = props => {
 };
 
 export default Voice;
+=======
+  '199226a56da7867b6331396deeb36eb22e956eca572e1d8b807a3e2338fdd0dc/stage';
+
+export default class Voice extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        {/* <Image style={styles.IconoirVoice} /> */}
+        <TouchableOpacity style={styles.buttonMic}>
+          <AlanView projectid={alanKey} />
+          <Image
+            style={styles.MdiMicrophone}
+            source={{
+              uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A136?alt=media&token=7fcbcd40-be32-4f1a-9000-0e1b124d3de2',
+            }}
+            resizeMode="stretch"
+          />
+        </TouchableOpacity>
+        {/* <Image
+          style={styles.IconoirVoice1}
+          source={{uri: 'image unavailable'}}
+        /> */}
+      </View>
+    );
+  }
+  componentDidMount() {
+    /// Handle commands from Alan Studio
+
+    alanEventEmitter.addListener('onEvent', payload => {
+      let eventObj = JSON.parse(payload);
+      switch (eventObj.name) {
+        case 'recognized':
+          console.info('Interim results:', eventObj.text);
+          break;
+        case 'parsed':
+          console.info('Final result:', eventObj.text);
+          break;
+        case 'text':
+          console.info('Alan reponse:', eventObj.text);
+          break;
+        default:
+          console.info('Unknown event');
+      }
+    });
+    // alanEventEmitter.addListener(
+    //   'onCommand', data => {
+    //   console.log(`onCommand: ${JSON.stringify(data)}`);
+    // });
+  }
+
+  componentWillUnmount() {
+    alanEventEmitter.removeAllListeners('onCommand');
+  }
+}
+>>>>>>> 53c0c4cfc40725a432ee07cd14322b9f844e2439
 
 const styles = StyleSheet.create({
   container: {
@@ -212,6 +275,7 @@ const styles = StyleSheet.create({
     width: windowWidth,
     height: windowHeight,
   },
+<<<<<<< HEAD
   grpTitleView: {
     display: 'flex',
     flexDirection: 'row',
@@ -241,6 +305,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     //alignItems: 'flex-end',
     textTransform: 'capitalize',
+=======
+  Group4710: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+>>>>>>> 53c0c4cfc40725a432ee07cd14322b9f844e2439
   },
   chatFrameView: {
     //display:'flex',
@@ -293,6 +363,11 @@ const styles = StyleSheet.create({
     marginRight: 7,
     borderRadius: 10,
     backgroundColor: 'rgba(0,172,131,1)',
+<<<<<<< HEAD
+=======
+    width: 80,
+    height: 80,
+>>>>>>> 53c0c4cfc40725a432ee07cd14322b9f844e2439
     justifyContent: 'center',
     alignItems: 'center',
     width: 40,
@@ -319,9 +394,18 @@ const styles = StyleSheet.create({
     height: 18,
   },
 
+<<<<<<< HEAD
   buttonSentImg: {
     //position: "absolute",
     width: 40,
     height: 40,
+=======
+  IconoirVoice1: {
+    position: 'absolute',
+    top: 277,
+    left: 160,
+    width: 168,
+    height: 200,
+>>>>>>> 53c0c4cfc40725a432ee07cd14322b9f844e2439
   },
 });

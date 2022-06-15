@@ -17,7 +17,11 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 
 import auth from '@react-native-firebase/auth';
+<<<<<<< HEAD
 import firebase from '@react-native-firebase/database';
+=======
+import database from '@react-native-firebase/database';
+>>>>>>> 53c0c4cfc40725a432ee07cd14322b9f844e2439
 import uuid from 'react-native-uuid';
 
 const windowWidth = Dimensions.get('window').width;
@@ -53,7 +57,11 @@ const SignUp = props => {
       return;
     }
 
+<<<<<<< HEAD
     __doCreateUser(email, password).then(savedUser());
+=======
+    __doCreateUser(email, password).then(savedUser);
+>>>>>>> 53c0c4cfc40725a432ee07cd14322b9f844e2439
   };
 
   const savedUser = async () => {
@@ -67,6 +75,7 @@ const SignUp = props => {
       email: email,
       password: password,
     };
+<<<<<<< HEAD
     firebase
       .app()
       .database(
@@ -74,6 +83,11 @@ const SignUp = props => {
       )
       .ref('/users/' + data.uuid)
       .push(data)
+=======
+    database()
+      .ref('/users/' + data.uuid)
+      .set(data)
+>>>>>>> 53c0c4cfc40725a432ee07cd14322b9f844e2439
       .then(ToastAndroid.show('Register successfully!', ToastAndroid.SHORT));
   };
 
