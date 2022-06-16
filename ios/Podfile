@@ -25,6 +25,10 @@ target 'ADmin_Assistant' do
 
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
 
+  pod 'TextToSpeech', :path => '../node_modules/react-native-tts'
+
+  pod 'react-native-slider', :path => '../node_modules/@react-native-community/slider'
+
   target 'ADmin_AssistantTests' do
     inherit! :complete
     # Pods for testing

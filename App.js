@@ -7,21 +7,12 @@ import {
   ImageBackground,
   AppState,
 } from 'react-native';
-<<<<<<< HEAD
 // import SignIn from './src/screens/SignIn';
 // import SignUp from './src/screens/SignUp';
 // import Chat from './src/screens/Chat';
 // import Voice from './src/screens/Voice';
 // import ForgotPassword from './src/screens/ForgotPassword';
 // import ResetPassword from './src/screens/ResetPassword';
-=======
-import SignIn from './src/screens/SignIn';
-import SignUp from './src/screens/SignUp';
-import Chat from './src/screens/Chat';
-import Voice from './src/screens/Voice';
-import ForgotPassword from './src/screens/ForgotPassword';
-import ResetPassword from './src/screens/ResetPassword';
->>>>>>> 53c0c4cfc40725a432ee07cd14322b9f844e2439
 
 import Navigation from './Navigation';
 

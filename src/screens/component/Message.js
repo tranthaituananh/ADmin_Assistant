@@ -83,6 +83,10 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 10,
     marginVertical: 5,
+    flexDirection: 'column',
+    //alignSelf: 'flex-end',
+    //alignItems: 'flex-end',
+    justifyContent: 'flex-end',
   },
   messageContainer: {
     backgroundColor: 'rgba(0,172,131,1)',

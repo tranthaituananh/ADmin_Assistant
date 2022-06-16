@@ -20,7 +20,10 @@ import {
   Linking,
   Alert,
   Platform,
+  RefreshControl,
 } from 'react-native';
+
+import Feather from 'react-native-vector-icons/Feather';
 
 import {AlanView} from '@alan-ai/alan-sdk-react-native';
 import {NativeEventEmitter, NativeModules} from 'react-native';
@@ -60,6 +63,10 @@ const openPhotos = () => {
   }
 };
 
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 const Chat = props => {
   // const [name, setName] = useState();
   // const getFullname = () => {
@@ -74,12 +81,6 @@ const Chat = props => {
   //   getFullname();
   // });
 
-  const [messages, setMessages] = useState([]);
-  const [isLeft, setIsLeft] = useState(true);
-  const [inputText, setInputText] = useState('');
-
-  const user = useRef(0);
-  const scrollView = useRef();
   //const time = new Date().getTime;
 
   // const getMessages = () => {
@@ -92,6 +93,11 @@ const Chat = props => {
   //     />
   //   ));
   // };
+  const [messages, setMessages] = useState([]);
+  const [isLeft, setIsLeft] = useState(true);
+
+  const user = useRef(0);
+  const scrollView = useRef();
 
   const [apps, setApps] = useState([
     {
@@ -99,12 +105,24 @@ const Chat = props => {
       url: 'https://www.youtube.com',
     },
     {
+      name: 'spotify',
+      url: 'https://open.spotify.com/playlist/5Jve4LdPwiHplGKlZ9nSOe?si=08e4c966c13c44c4&nd=1',
+    },
+    {
       name: 'instagram',
       url: 'https://www.instagram.com/',
     },
     {
+      name: 'facebook',
+      url: 'https://www.facebook.com/',
+    },
+    {
       name: 'google-maps',
       url: 'https://www.google.com/maps/',
+    },
+    {
+      name: 'google-photos',
+      url: 'https://photos.google.com/u/',
     },
     {
       name: 'google-assistant',
@@ -120,6 +138,20 @@ const Chat = props => {
     },
   ]);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
+  const [inputText, setInputText] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
+
+  // const onFocusChange = () => {
+  //   setIsFocused(true);
+  // };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.grpTitleView}>
@@ -132,108 +164,155 @@ const Chat = props => {
         <Text style={styles.userName}>ADmin Assistant</Text>
       </View>
 
-      <ScrollView
-        style={styles.chatFrameView}
-        ref={ref => (scrollView.current = ref)}
-        onContentChange={() => {
-          scrollView.current.scrollToEnd({animated: true});
-        }}>
-        <AlanView projectid={alanKey} />
-
-        {useEffect(() => {
-          alanEventEmitter.addListener('onCommand', data => {
-            console.log(`onCommand: ${JSON.stringify(data)}`);
-            for (var index = 0; index < apps.length; index++) {
-              if (data.command == apps[index].name) {
-                openURL(apps[index].url);
+      <View style={styles.chatFrameView}>
+        <ScrollView
+          style={{width: '100%', height: '80%'}}
+          ref={ref => (scrollView.current = ref)}
+          onContentChange={() => {
+            scrollView.current.scrollToEnd({animated: true});
+          }}
+          overScrollMode="auto"
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+          <AlanView
+            projectid={alanKey}
+            onPress={() => {
+              if (AlanManager.activate()) {
+                messages.map((message, index) => (
+                  <Message
+                    key={index}
+                    time={message.time}
+                    isLeft={message.user !== user.current}
+                    message={message.content}
+                  />
+                ));
               }
-            }
-            switch (data.navigate) {
-              case 'goSignIn':
-                props.navigation.navigate('SignIn');
-                break;
-              case 'goSignUp':
-                props.navigation.navigate('SignUp');
-                break;
-              case 'goSignOut':
-                props.navigation.navigate('SignIn');
-                break;
-              case 'goChat':
-                props.navigation.navigate('Chat');
-                break;
-              case 'goVoice':
-                props.navigation.navigate('Voice');
-                break;
-              default:
-                break;
-            }
-          });
-          alanEventEmitter.addListener('onEvent', payload => {
-            let eventObj = JSON.parse(payload);
-
-            switch (eventObj.name) {
-              case 'recognized':
-                console.info('Interim results:', eventObj.text);
-                break;
-              case 'parsed':
-                console.info('Final result:', eventObj.text);
-                messages.push({
-                  user: 0,
-                  //time:
-                  content: eventObj.text,
-                });
-
-                break;
-              case 'text':
-                console.info('Alan reponse:', eventObj.text);
-                messages.push({
-                  user: 1,
-                  //time:
-                  content: eventObj.text,
-                });
-                break;
-              default:
-                console.info('Unknown event');
-            }
-          });
-          return () => {
-            alanEventEmitter.removeAllListeners('onCommand');
-            alanEventEmitter.removeAllListeners('onEvent');
-
-            AlanManager.deactivate();
-            //messages.splice(0, messages.length);
-          };
-        }, [])}
-        {messages.map((message, index) => (
-          <Message
-            key={index}
-            time={message.time}
-            isLeft={message.user !== user.current}
-            message={message.content}
+            }}
           />
-        ))}
-        {console.log(messages)}
-      </ScrollView>
 
+          {useEffect(() => {
+            alanEventEmitter.addListener('onCommand', data => {
+              console.log(`onCommand: ${JSON.stringify(data)}`);
+              for (var index = 0; index < apps.length; index++) {
+                if (data.command == apps[index].name) {
+                  openURL(apps[index].url);
+                }
+              }
+              switch (data.navigate) {
+                case 'goSignIn':
+                  props.navigation.navigate('SignIn');
+                  break;
+                case 'goSignUp':
+                  props.navigation.navigate('SignUp');
+                  break;
+                case 'goSignOut':
+                  props.navigation.navigate('SignIn');
+                  break;
+                case 'goChat':
+                  props.navigation.navigate('Chat');
+                  break;
+                case 'goReadText':
+                  props.navigation.navigate('ReadText');
+                  break;
+                default:
+                  break;
+              }
+            });
+            alanEventEmitter.addListener('onEvent', payload => {
+              let eventObj = JSON.parse(payload);
+
+              switch (eventObj.name) {
+                case 'recognized':
+                  console.info('Interim results:', eventObj.text);
+                  break;
+                case 'parsed':
+                  console.info('Final result:', eventObj.text);
+                  messages.push({
+                    user: 0,
+                    //time:
+                    content: eventObj.text,
+                  });
+
+                  break;
+                case 'text':
+                  console.info('Alan reponse:', eventObj.text);
+                  messages.push({
+                    user: 1,
+                    //time:
+                    content: eventObj.text,
+                  });
+                  break;
+                default:
+                  console.info('Unknown event');
+              }
+            });
+            setMessages(messages);
+
+            return () => {
+              alanEventEmitter.removeAllListeners('onCommand');
+              alanEventEmitter.removeAllListeners('onEvent');
+              AlanManager.deactivate();
+              //messages.splice(0, messages.length);
+            };
+          }, [])}
+          {}
+          {messages.map((message, index) => (
+            <Message
+              key={index}
+              time={message.time}
+              isLeft={message.user !== user.current}
+              message={message.content}
+            />
+          ))}
+          {console.log(messages)}
+        </ScrollView>
+      </View>
       <View style={styles.grpFeatureView}>
         <View style={styles.inputView}>
           <TextInput
             placeholder="Write"
             placeholderTextColor={'rgba(255, 255, 255, 0.55)'}
-            style={styles.inputText}
+            style={[
+              styles.inputText,
+              isFocused && {borderColor: 'rgba(255, 255, 255, 0.55)'},
+            ]}
             color="#fff"
-            //value={messages}
+            value={inputText}
             onChangeText={text => setInputText(text)}
+            onFocus={() => {
+              setIsFocused(true);
+            }}
+            onBlur={() => {
+              setIsFocused(false);
+            }}
           />
           <TouchableOpacity
+            style={[
+              styles.buttonSentImg,
+              {
+                backgroundColor: isFocused
+                  ? 'rgba(0,172,131,1)'
+                  : 'rgb(55,62,78)',
+              },
+            ]}
             onPress={() => {
-              messages.push({user: 0, content: inputText});
+              messages.push({user: 0, content: inputText}),
+                messages.map((message, index) => (
+                  <Message
+                    key={index}
+                    time={message.time}
+                    isLeft={message.user !== user.current}
+                    message={message.content}
+                  />
+                ));
+              setInputText('');
             }}>
-            <Image
-              style={styles.buttonSentImg}
-              source={{
-                uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A119?alt=media&token=83d60199-0897-47d4-a189-83080290f804',
-              }}
+            <Feather
+              name={isFocused ? 'send' : 'message-circle'}
+              size={27}
+              color={isFocused ? 'rgb(255,255,255)' : 'rgb(165,168,175)'}
+              resizeMode="center"
             />
           </TouchableOpacity>
         </View>
@@ -319,9 +398,12 @@ const styles = StyleSheet.create({
     //textTransform: 'capitalize',
   },
   chatFrameView: {
-    //display:'flex',
+    display: 'flex',
     width: '100%',
-    height: '80%',
+    height: '85%',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    flexDirection: 'column',
     //backgroundColor: "rgba(41,47,63,1)",
   },
 
@@ -329,7 +411,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-    height: 40,
+    height: '8%',
     marginBottom: 5,
   },
   inputView: {
@@ -399,6 +481,9 @@ const styles = StyleSheet.create({
     //position: "absolute",
     width: 40,
     height: 40,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   //MessageBubble
