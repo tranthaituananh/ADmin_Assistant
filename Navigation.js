@@ -16,7 +16,7 @@ const Navigation = props => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="ReadText"
+        initialRouteName="Loading"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Loading" component={Loading} />
         <Stack.Screen name="SignIn" component={SignIn} />

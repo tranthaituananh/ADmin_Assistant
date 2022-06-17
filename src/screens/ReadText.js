@@ -146,12 +146,18 @@ export default class ReadText extends Component<Props> {
     return (
       <View style={styles.container}>
         <View style={styles.grpTitleView}>
-          <Image
-            style={styles.avatar}
-            source={{
-              uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A132?alt=media&token=a3d24d05-a29e-4d41-9c65-394308556e94',
-            }}
-          />
+          <TouchableOpacity
+            style={styles.avatarView}
+            onPress={() => this.props.navigation.navigate('Chat')}>
+            <Image
+              style={styles.avatar}
+              source={require('../image/logoApp.png')}
+              // source={{
+              //   uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A132?alt=media&token=a3d24d05-a29e-4d41-9c65-394308556e94',
+              // }}
+            />
+          </TouchableOpacity>
+
           <Text style={styles.userName}>ADmin Assistant</Text>
         </View>
 
@@ -249,14 +255,21 @@ const styles = StyleSheet.create({
     //backgroundColor: '#fff',
     //marginBottom: 623,
   },
-  avatar: {
+  avatarView: {
     width: '14%',
     height: '92%',
     //marginLeft: 5,
     justifyContent: 'flex-start',
     alignItems: 'center',
     borderRadius: 100,
-    //marginRight: 114,
+  },
+  avatar: {
+    width: '100%',
+    height: '100%',
+    //marginLeft: 5,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    borderRadius: 100,
   },
   userName: {
     width: '86%',
@@ -304,7 +317,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Helvetica, sans-serif',
     fontWeight: '400',
-    marginTop: '10%',
+    marginTop: '7%',
   },
   btnRead: {
     justifyContent: 'center',
@@ -321,7 +334,7 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 18,
     fontFamily: 'Helvetica, sans-serif',
-    fontWeight: '700',
+    //fontWeight: '700',
     textTransform: 'uppercase',
     textAlign: 'center',
     color: '#fff',

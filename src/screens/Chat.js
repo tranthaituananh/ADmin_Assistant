@@ -24,6 +24,7 @@ import {
 } from 'react-native';
 
 import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {AlanView} from '@alan-ai/alan-sdk-react-native';
 import {NativeEventEmitter, NativeModules} from 'react-native';
@@ -148,19 +149,17 @@ const Chat = props => {
   const [inputText, setInputText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
 
-  // const onFocusChange = () => {
-  //   setIsFocused(true);
-  // };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.grpTitleView}>
-        <Image
-          style={styles.avatar}
-          source={{
-            uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A132?alt=media&token=a3d24d05-a29e-4d41-9c65-394308556e94',
-          }}
-        />
+        <TouchableOpacity
+          style={styles.avatarView}
+          onPress={() => this.props.navigation.navigate('Chat')}>
+          <Image
+            style={styles.avatar}
+            source={require('../image/logoApp.png')}
+          />
+        </TouchableOpacity>
         <Text style={styles.userName}>ADmin Assistant</Text>
       </View>
 
@@ -256,7 +255,6 @@ const Chat = props => {
               //messages.splice(0, messages.length);
             };
           }, [])}
-          {}
           {messages.map((message, index) => (
             <Message
               key={index}
@@ -265,7 +263,7 @@ const Chat = props => {
               message={message.content}
             />
           ))}
-          {console.log(messages)}
+          {/*console.log(messages)*/}
         </ScrollView>
       </View>
       <View style={styles.grpFeatureView}>
@@ -332,14 +330,23 @@ const Chat = props => {
 
         <TouchableOpacity
           style={styles.buttonFeature}
-          onPress={() => this.props.navigation.navigate('SignUp')}>
-          <Image
+          onPress={() => this.props.navigation.navigate('ReadText')}>
+          <Ionicons
+            name="book-sharp"
+            size={27}
+            style={{
+              paddingTop: 4,
+              paddingLeft: 2,
+            }}
+            color="#fff"
+          />
+          {/* <Image
             style={styles.cameraImg}
             source={{
               uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A113?alt=media&token=59ce58d5-54e1-4843-a1ff-6f53d2a75f8b',
             }}
             resizeMode="center"
-          />
+          /> */}
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -376,14 +383,21 @@ const styles = StyleSheet.create({
     //backgroundColor: '#fff',
     //marginBottom: 623,
   },
-  avatar: {
+  avatarView: {
     width: '14%',
     height: '92%',
     //marginLeft: 5,
     justifyContent: 'flex-start',
     alignItems: 'center',
     borderRadius: 100,
-    //marginRight: 114,
+  },
+  avatar: {
+    width: '100%',
+    height: '100%',
+    //marginLeft: 5,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    borderRadius: 100,
   },
   userName: {
     width: '86%',
@@ -444,11 +458,6 @@ const styles = StyleSheet.create({
   },
 
   buttonFeature: {
-    //paddingTop: 11,
-    //paddingBottom: 11,
-    //paddingLeft: 11,
-    //paddingRight: 12,
-    marginRight: 7,
     borderRadius: 10,
     backgroundColor: 'rgba(0,172,131,1)',
     justifyContent: 'center',
