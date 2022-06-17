@@ -154,7 +154,7 @@ const Chat = props => {
       <View style={styles.grpTitleView}>
         <TouchableOpacity
           style={styles.avatarView}
-          onPress={() => this.props.navigation.navigate('Chat')}>
+          onPress={() => props.navigation.navigate('Chat')}>
           <Image
             style={styles.avatar}
             source={require('../image/logoApp.png')}
@@ -174,22 +174,7 @@ const Chat = props => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-          <AlanView
-            projectid={alanKey}
-            onPress={() => {
-              if (AlanManager.activate()) {
-                messages.map((message, index) => (
-                  <Message
-                    key={index}
-                    time={message.time}
-                    isLeft={message.user !== user.current}
-                    message={message.content}
-                  />
-                ));
-              }
-            }}
-          />
-
+          <AlanView projectid={alanKey} />
           {useEffect(() => {
             alanEventEmitter.addListener('onCommand', data => {
               console.log(`onCommand: ${JSON.stringify(data)}`);
@@ -305,6 +290,18 @@ const Chat = props => {
                   />
                 ));
               setInputText('');
+              AlanManager.activate();
+              AlanManager.callProjectApi(
+                'handleText',
+                {user: 0, content: inputText},
+                (error, result) => {
+                  if (error) {
+                    console.error(error);
+                  } else {
+                    console.log('Alan res: ', result);
+                  }
+                },
+              );
             }}>
             <Feather
               name={isFocused ? 'send' : 'message-circle'}
@@ -330,7 +327,7 @@ const Chat = props => {
 
         <TouchableOpacity
           style={styles.buttonFeature}
-          onPress={() => this.props.navigation.navigate('ReadText')}>
+          onPress={() => props.navigation.navigate('ReadText')}>
           <Ionicons
             name="book-sharp"
             size={27}

@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     paddingTop: 5,
     paddingBottom: 10,
-    marginBottom: 10,
+    //marginBottom: 10,
   },
   messageView: {
     //backgroundColor: 'green',

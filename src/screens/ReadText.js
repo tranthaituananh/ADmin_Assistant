@@ -17,6 +17,13 @@ import Slider from '@react-native-community/slider';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+// import {AlanView} from '@alan-ai/alan-sdk-react-native';
+// import {NativeEventEmitter, NativeModules} from 'react-native';
+// const {AlanManager, AlanEventEmitter} = NativeModules;
+// const alanEventEmitter = new NativeEventEmitter(AlanEventEmitter);
+// const alanKey =
+//   '087ceaf34fe1d0396eac8ce8d828fcfd2e956eca572e1d8b807a3e2338fdd0dc/stage';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -108,11 +115,6 @@ export default class ReadText extends Component<Props> {
 
   renderVoiceItem = ({item}) => {
     return (
-      // <Button
-      //   title={`${item.language} - ${item.name || item.id}`}
-      //   color={this.state.selectedVoice === item.id ? undefined : '#969696'}
-      //   onPress={() => this.onVoicePress(item)}
-      // />
       <TouchableOpacity
         style={styles.btnLang}
         onPress={() => this.onVoicePress(item)}>
@@ -152,9 +154,6 @@ export default class ReadText extends Component<Props> {
             <Image
               style={styles.avatar}
               source={require('../image/logoApp.png')}
-              // source={{
-              //   uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A132?alt=media&token=a3d24d05-a29e-4d41-9c65-394308556e94',
-              // }}
             />
           </TouchableOpacity>
 
