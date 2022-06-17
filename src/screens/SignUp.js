@@ -24,11 +24,12 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const SignUp = props => {
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [error, setError] = useState();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [isValid, setValid] = useState(true);
+  const [isFocused, setIsFocused] = useState(false);
 
   const __isValidEmail = email => {
     var re =
@@ -40,20 +41,23 @@ const SignUp = props => {
     if (!email) {
       setError('Email required *');
       setValid(false);
+      ToastAndroid.show(error, ToastAndroid.LONG);
       return;
     }
     if (!password && password.trim() && password.length > 6) {
       setError('Weak password, minimum 5 chars');
       setValid(false);
+      ToastAndroid.show(error, ToastAndroid.LONG);
       return;
     }
     if (!__isValidEmail(email)) {
       setError('Invalid Email');
       setValid(false);
+      ToastAndroid.show(error, ToastAndroid.LONG);
       return;
     }
 
-    __doCreateUser(email, password).then(savedUser());
+    __doCreateUser(email, password);
   };
 
   const savedUser = async () => {
@@ -79,11 +83,15 @@ const SignUp = props => {
 
   const __doCreateUser = async (email, password) => {
     try {
-      let response = await auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(() => props.navigation.navigate('SignIn'));
+      let response = await auth().createUserWithEmailAndPassword(
+        email,
+        password,
+      );
       if (response && response.user) {
-        Alert.alert('Success ✅', 'Account created successfully');
+        ToastAndroid.show('Register successfully!', ToastAndroid.SHORT);
+        props.navigation.navigate('SignIn');
+        // Alert.alert('Success ✅', 'Account created successfully');
+        savedUser();
       }
     } catch (e) {
       console.error(e.message);
@@ -96,17 +104,29 @@ const SignUp = props => {
         <Text style={styles.title}>Create Account</Text>
 
         <View style={styles.inputView}>
-          <Feather name="user" size={25} />
+          <Feather
+            name="user"
+            size={25}
+            color={isFocused ? 'rgba(0,172,131,1)' : null}
+          />
           <TextInput
             placeholder="Fullname"
             style={styles.inputText}
             autoCapitalize="none"
             value={name}
             onChangeText={text => setName(text)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => {
+              setIsFocused(false);
+            }}
           />
         </View>
         <View style={styles.inputView}>
-          <Feather name="mail" size={25} />
+          <Feather
+            name="mail"
+            size={25}
+            color={isFocused ? 'rgba(0,172,131,1)' : null}
+          />
           <TextInput
             placeholder="Email"
             style={styles.inputText}
@@ -117,10 +137,18 @@ const SignUp = props => {
               setEmail(text);
             }}
             error={isValid}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => {
+              setIsFocused(false);
+            }}
           />
         </View>
         <View style={styles.inputView}>
-          <Feather name="key" size={25} />
+          <Feather
+            name="key"
+            size={25}
+            color={isFocused ? 'rgba(0,172,131,1)' : null}
+          />
           <TextInput
             placeholder="Password"
             style={styles.inputText}
@@ -129,6 +157,10 @@ const SignUp = props => {
             error={isValid}
             onChangeText={text => setPassword(text)}
             secureTextEntry
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => {
+              setIsFocused(false);
+            }}
           />
         </View>
 
@@ -138,18 +170,16 @@ const SignUp = props => {
           </View>
         ) : null}
 
-        <View style={styles.forgotPassView}>
+        <View style={styles.questionView}>
           <Text style={styles.questionText}>I agree to the UNICEF</Text>
-          <TouchableOpacity>
-            <Text style={styles.onClickText}> Terms and Conditions</Text>
-          </TouchableOpacity>
+          <Text style={styles.onClickText}> Terms and Conditions</Text>
         </View>
 
         <TouchableOpacity style={styles.buttonView} onPress={_doSignUp}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
 
-        <View style={styles.forgotPassView}>
+        <View style={styles.questionView}>
           <Text style={styles.questionText}>Already have an account?</Text>
           <TouchableOpacity onPress={() => props.navigation.navigate('SignIn')}>
             <Text style={styles.onClickText}> Sign In</Text>
@@ -168,8 +198,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
 
-    paddingLeft: 10,
-    paddingRight: 10,
+    padding: 7,
     backgroundColor: 'rgba(41,47,63,1)',
     shadowColor: 'rgba(24,48,63,0.5)',
     //elevation: 10,
@@ -185,10 +214,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: 60,
     alignItems: 'center',
-    marginTop: 80,
-    marginBottom: 60,
+    marginTop: '20%',
+    marginBottom: '5%',
   },
   inputView: {
     display: 'flex',
@@ -197,8 +225,7 @@ const styles = StyleSheet.create({
     height: 50,
     paddingLeft: 5,
     paddingRight: 5,
-    marginTop: 15,
-    //bottom: 25,
+    marginTop: '7%',
     justifyContent: 'flex-start',
     alignItems: 'center',
 
@@ -216,11 +243,18 @@ const styles = StyleSheet.create({
     //lineHeight: 20,
     fontStyle: 'normal',
   },
+  errorLabelContainerStyle: {
+    marginTop: '5%',
+  },
+  errorTextStyle: {
+    color: 'red',
+    fontSize: 13,
+  },
 
-  forgotPassView: {
+  questionView: {
     width: '100%',
-    height: 25,
-    marginTop: 30,
+    //height: 25,
+    marginTop: '10%',
     flexDirection: 'row',
     justifyContent: 'center',
   },
@@ -240,10 +274,10 @@ const styles = StyleSheet.create({
   },
   onClickText: {
     fontFamily: 'Poppins, sans-serif',
-    fontWeight: 'bold',
+    fontWeight: '700',
     fontStyle: 'normal',
     fontSize: 13,
-    lineHeight: 17,
+    lineHeight: 16,
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
@@ -258,12 +292,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: '50%',
     height: 50,
-    //paddingTop: 7,
-    //paddingBottom: 11,
-    //paddingLeft: 32,
-    //paddingRight: 32.15,
-    //marginBottom: 28,
-    marginTop: 36,
+    marginTop: '10%',
     borderRadius: 13.06,
     backgroundColor: 'rgba(0,172,131,1)',
   },
@@ -276,7 +305,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     textTransform: 'uppercase',
-    //backgroundColor: '#000',
   },
 });
 

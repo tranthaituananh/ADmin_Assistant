@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -27,6 +28,7 @@ const SignIn = props => {
   const [fetching, setFetching] = useState(false);
   const [error, setError] = useState('');
   const [isValid, setValid] = useState(true);
+  const [isFocused, setIsFocused] = useState(false);
 
   const __isValidEmail = email => {
     var re =
@@ -38,13 +40,16 @@ const SignIn = props => {
     if (!email) {
       setError('Email required *');
       setValid(false);
+      ToastAndroid.show('Please type email', ToastAndroid.LONG);
       return;
     } else if (!password && password.trim() && password.length > 6) {
       setError('Weak password, minimum 5 chars');
+      ToastAndroid.show(error, ToastAndroid.LONG);
       setValid(false);
       return;
     } else if (!__isValidEmail(email)) {
       setError('Invalid Email');
+      ToastAndroid.show(error, ToastAndroid.LONG);
       setValid(false);
       return;
     }
@@ -53,16 +58,19 @@ const SignIn = props => {
       password,
     };
 
-    __doSignIn(email, password).then(() => props.navigation.navigate('Chat'));
+    __doSignIn(email, password);
   };
 
   const __doSignIn = async (email, password) => {
     try {
       let response = await auth().signInWithEmailAndPassword(email, password);
       if (response && response.user) {
-        Alert.alert('Success ✅', 'Logged successfully');
+        ToastAndroid.show('Login successfully', ToastAndroid.SHORT);
+        // Alert.alert('Success ✅', 'Login successfully');
+        props.navigation.navigate('Chat');
       }
     } catch (e) {
+      ToastAndroid.show('Login failed, please try again', ToastAndroid.SHORT);
       console.error(e.message);
     }
   };
@@ -72,7 +80,11 @@ const SignIn = props => {
       <SafeAreaView style={styles.container}>
         <Text style={styles.title}>Welcome Back!</Text>
         <View style={styles.inputView}>
-          <MaterialIcons name="email" size={25} />
+          <MaterialIcons
+            name="email"
+            size={25}
+            color={isFocused ? 'rgba(0,172,131,1)' : null}
+          />
           <TextInput
             placeholder="Email"
             style={styles.inputText}
@@ -82,10 +94,18 @@ const SignIn = props => {
               setEmail(text);
             }}
             error={isValid}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => {
+              setIsFocused(false);
+            }}
           />
         </View>
         <View style={styles.inputView}>
-          <Feather name="key" size={25} />
+          <Feather
+            name="key"
+            size={25}
+            color={isFocused ? 'rgba(0,172,131,1)' : null}
+          />
           <TextInput
             placeholder="Password"
             style={styles.inputText}
@@ -94,15 +114,27 @@ const SignIn = props => {
             onChangeText={text => setPassword(text)}
             error={isValid}
             secureTextEntry
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => {
+              setIsFocused(false);
+            }}
           />
         </View>
 
+        {error ? (
+          <View style={styles.errorLabelContainerStyle}>
+            <Text style={styles.errorTextStyle}>{error}</Text>
+          </View>
+        ) : null}
+
         <View style={styles.questionView}>
           <Text style={styles.questionText}>Forgot Password?</Text>
-          <TouchableOpacity
+          <Text
+            style={styles.onClickText}
             onPress={() => props.navigation.navigate('ForgotPassword')}>
-            <Text style={styles.onClickText}> Click Here</Text>
-          </TouchableOpacity>
+            {' '}
+            Click Here
+          </Text>
         </View>
 
         <TouchableOpacity style={styles.buttonView} onPress={__doLogin}>
@@ -111,9 +143,12 @@ const SignIn = props => {
 
         <View style={styles.questionView}>
           <Text style={styles.questionText}>Don’t have an account?</Text>
-          <TouchableOpacity onPress={() => props.navigation.navigate('SignUp')}>
-            <Text style={styles.onClickText}> Sign Up</Text>
-          </TouchableOpacity>
+          <Text
+            style={styles.onClickText}
+            onPress={() => props.navigation.navigate('SignUp')}>
+            {' '}
+            Sign Up
+          </Text>
         </View>
       </SafeAreaView>
     </ScrollView>
@@ -128,7 +163,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
 
-    padding: 5,
+    padding: 7,
     backgroundColor: 'rgba(41,47,63,1)',
     shadowColor: 'rgba(24,48,63,0.5)',
     //elevation: 10,
@@ -144,10 +179,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: 60,
+    //height: 60,
     alignItems: 'center',
-    marginTop: 100,
-    marginBottom: 80,
+    marginTop: '27%',
+    marginBottom: '15%',
   },
   inputView: {
     //display: "flex",
@@ -175,11 +210,18 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     fontStyle: 'normal',
   },
+  errorLabelContainerStyle: {
+    marginTop: '5%',
+  },
+  errorTextStyle: {
+    color: 'red',
+    fontSize: 13,
+  },
 
   questionView: {
     width: '100%',
-    height: 25,
-    marginTop: 30,
+    //height: 25,
+    marginTop: '10%',
     flexDirection: 'row',
     justifyContent: 'center',
   },
@@ -199,10 +241,10 @@ const styles = StyleSheet.create({
   },
   onClickText: {
     fontFamily: 'Poppins, sans-serif',
-    fontWeight: '200',
+    fontWeight: '700',
     fontStyle: 'normal',
     fontSize: 13,
-    //lineHeight: 16,
+    lineHeight: 16,
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
@@ -217,12 +259,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: '50%',
     height: 50,
-    //paddingTop: 7,
-    //paddingBottom: 11,
-    //paddingLeft: 32,
-    //paddingRight: 32.15,
-    //marginBottom: 28,
-    marginTop: 36,
+    marginTop: '10%',
     borderRadius: 13.06,
     backgroundColor: 'rgba(0,172,131,1)',
   },
