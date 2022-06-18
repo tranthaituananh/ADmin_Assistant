@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {
-  Platform,
+import React, {
+  Component} from 'react';
+
+  import {
   StyleSheet,
   Text,
   View,
-  Button,
   FlatList,
   TextInput,
   Keyboard,
@@ -12,17 +12,11 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+
 import Tts from 'react-native-tts';
 import Slider from '@react-native-community/slider';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-// import {AlanView} from '@alan-ai/alan-sdk-react-native';
-// import {NativeEventEmitter, NativeModules} from 'react-native';
-// const {AlanManager, AlanEventEmitter} = NativeModules;
-// const alanEventEmitter = new NativeEventEmitter(AlanEventEmitter);
-// const alanKey =
-//   '087ceaf34fe1d0396eac8ce8d828fcfd2e956eca572e1d8b807a3e2338fdd0dc/stage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -73,7 +67,6 @@ export default class ReadText extends Component<Props> {
       try {
         await Tts.setDefaultLanguage(voices[0].language);
       } catch (err) {
-        // My Samsung S9 has always this error: "Language is not supported"
         console.log(`setDefaultLanguage error `, err);
       }
       await Tts.setDefaultVoice(voices[0].id);
@@ -106,7 +99,6 @@ export default class ReadText extends Component<Props> {
     try {
       await Tts.setDefaultLanguage(voice.language);
     } catch (err) {
-      // My Samsung S9 has always this error: "Language is not supported"
       console.log(`setDefaultLanguage error `, err);
     }
     await Tts.setDefaultVoice(voice.id);
@@ -159,14 +151,6 @@ export default class ReadText extends Component<Props> {
 
           <Text style={styles.userName}>ADmin Assistant</Text>
         </View>
-
-        {/* <Text style={styles.label}>{`Status: ${
-          this.state.ttsStatus || ''
-        }`}</Text>
-
-        <Text style={styles.label}>{`Selected Voice: ${
-          this.state.selectedVoice || ''
-        }`}</Text> */}
 
         <View style={{flexDirection: 'row'}}>
           <FlatList
@@ -226,50 +210,47 @@ export default class ReadText extends Component<Props> {
   }
 }
 
+//UI Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //display: "flex",
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    //alignItems: 'center',
     padding: 7,
     backgroundColor: 'rgba(41,47,63,1)',
     shadowColor: 'rgba(24,48,63,0.5)',
-    //elevation: 10,
     shadowOffset: {width: 40, height: 40},
     width: windowWidth,
     height: windowHeight,
   },
+
   grpTitleView: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    //paddingTop: 5,
     width: '100%',
     height: '9%',
     justifyContent: 'flex-start',
     borderBottomWidth: 1 / 2,
     borderBottomColor: 'rgba(255, 255, 255, 0.4)',
-    //backgroundColor: '#fff',
-    //marginBottom: 623,
   },
+
   avatarView: {
     width: '14%',
     height: '92%',
-    //marginLeft: 5,
     justifyContent: 'flex-start',
     alignItems: 'center',
     borderRadius: 100,
   },
+
   avatar: {
     width: '100%',
     height: '100%',
-    //marginLeft: 5,
     justifyContent: 'flex-start',
     alignItems: 'center',
     borderRadius: 100,
   },
+
   userName: {
     width: '86%',
     fontSize: 18,
@@ -280,44 +261,46 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    //textTransform: 'capitalize',
   },
+
   label: {
     textAlign: 'center',
     color: '#fff',
   },
+
   sliderContainer: {
     marginTop: '10%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   sliderLabel: {
     textAlign: 'left',
-    //marginRight: 10,
     color: '#fff',
     width: '25%',
   },
+
   slider: {
     width: '75%',
   },
+
   textInput: {
     borderRadius: 10,
     backgroundColor: 'rgba(0,0,0,0.25)',
     borderColor: 'gray',
     borderWidth: 1,
-    //flex: 1,
     width: '100%',
     color: '#fff',
     textAlign: 'left',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    //padding: 5,
     fontSize: 14,
     fontFamily: 'Helvetica, sans-serif',
     fontWeight: '400',
     marginTop: '7%',
   },
+
   btnRead: {
     justifyContent: 'center',
     marginTop: '5%',
@@ -325,20 +308,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,172,131,1)',
     borderRadius: 10,
     height: 45,
-    //width: '40%',
     paddingLeft: 5,
     paddingRight: 5,
     flexDirection: 'row',
   },
+
   btnText: {
     fontSize: 18,
     fontFamily: 'Helvetica, sans-serif',
-    //fontWeight: '700',
     textTransform: 'uppercase',
     textAlign: 'center',
     color: '#fff',
     paddingLeft: 5,
   },
+
   btnLang: {
     flexDirection: 'row',
     justifyContent: 'flex-start',

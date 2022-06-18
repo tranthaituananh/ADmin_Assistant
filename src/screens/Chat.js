@@ -1,50 +1,38 @@
 import React, {
-  Component,
-  useCallback,
   useState,
   useEffect,
   useRef,
 } from 'react';
+
 import {
   StyleSheet,
   Image,
   Text,
   View,
-  ImageBackground,
   ScrollView,
   TextInput,
   Dimensions,
   SafeAreaView,
   TouchableOpacity,
-  Button,
   Linking,
   Alert,
-  Platform,
   RefreshControl,
 } from 'react-native';
 
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import {AlanView} from '@alan-ai/alan-sdk-react-native';
 import {NativeEventEmitter, NativeModules} from 'react-native';
 import Message from './component/Message';
-import database from '@react-native-firebase/database';
-import uuid from 'react-native-uuid';
 
 const {AlanManager, AlanEventEmitter} = NativeModules;
 const alanEventEmitter = new NativeEventEmitter(AlanEventEmitter);
-
-// const alanKey =
-//   '199226a56da7867b6331396deeb36eb22e956eca572e1d8b807a3e2338fdd0dc/stage';
-
-const alanKey =
-  '087ceaf34fe1d0396eac8ce8d828fcfd2e956eca572e1d8b807a3e2338fdd0dc/stage';
-
+const alanKey =  '087ceaf34fe1d0396eac8ce8d828fcfd2e956eca572e1d8b807a3e2338fdd0dc/stage';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-
 const number = '+84 795164691';
+
+//Mở  web theo url mà người dùng đưa vào bằng giọng nói 
 const openURL = async url => {
   const isSupported = await Linking.canOpenURL(url);
   if (isSupported) {
@@ -54,49 +42,13 @@ const openURL = async url => {
   }
 };
 
-const openPhotos = () => {
-  if (Platform.OS === 'android') {
-    Linking.openURL('content://media/internal/images/media');
-  } else if (Platform.OS === 'ios') {
-    Linking.openURL('photos-redirect://');
-  } else {
-    Alert.alert("Can't open gallery");
-  }
-};
-
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
 const Chat = props => {
-  // const [name, setName] = useState();
-  // const getFullname = () => {
-  //   database()
-  //     .ref('/users/' + uuid.v4())
-  //     .once('value')
-  //     .then(snapshot => {
-  //       console.log('User data: ', snapshot.val());
-  //     });
-  // };
-  // useEffect(() => {
-  //   getFullname();
-  // });
-
-  //const time = new Date().getTime;
-
-  // const getMessages = () => {
-  //   messages.map((message, index) => (
-  //     <Message
-  //       key={index}
-  //       time={message.time}
-  //       isLeft={message.user !== user.current}
-  //       message={message.content}
-  //     />
-  //   ));
-  // };
   const [messages, setMessages] = useState([]);
   const [isLeft, setIsLeft] = useState(true);
-
   const user = useRef(0);
   const scrollView = useRef();
 
@@ -183,6 +135,7 @@ const Chat = props => {
                   openURL(apps[index].url);
                 }
               }
+              //Thực hiện 1 số thao tác chuyển tiếp màn hình bên trong app
               switch (data.navigate) {
                 case 'goSignIn':
                   props.navigation.navigate('SignIn');
@@ -214,16 +167,13 @@ const Chat = props => {
                   console.info('Final result:', eventObj.text);
                   messages.push({
                     user: 0,
-                    //time:
                     content: eventObj.text,
                   });
-
                   break;
                 case 'text':
-                  console.info('Alan reponse:', eventObj.text);
+                  console.info('Alan response:', eventObj.text);
                   messages.push({
                     user: 1,
-                    //time:
                     content: eventObj.text,
                   });
                   break;
@@ -237,7 +187,6 @@ const Chat = props => {
               alanEventEmitter.removeAllListeners('onCommand');
               alanEventEmitter.removeAllListeners('onEvent');
               AlanManager.deactivate();
-              //messages.splice(0, messages.length);
             };
           }, [])}
           {messages.map((message, index) => (
@@ -248,9 +197,9 @@ const Chat = props => {
               message={message.content}
             />
           ))}
-          {/*console.log(messages)*/}
         </ScrollView>
       </View>
+      
       <View style={styles.grpFeatureView}>
         <View style={styles.inputView}>
           <TextInput
@@ -312,19 +261,6 @@ const Chat = props => {
           </TouchableOpacity>
         </View>
 
-        {/* <TouchableOpacity
-          style={styles.buttonFeature}
-          // onPress={() => this.props.navigation.navigate('Voice')}
-        >
-          <Image
-            style={styles.MdiMicrophone}
-            source={{
-              uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A136?alt=media&token=7fcbcd40-be32-4f1a-9000-0e1b124d3de2',
-            }}
-            resizeMode="center"
-          />
-        </TouchableOpacity> */}
-
         <TouchableOpacity
           style={styles.buttonFeature}
           onPress={() => props.navigation.navigate('ReadText')}>
@@ -337,65 +273,54 @@ const Chat = props => {
             }}
             color="#fff"
           />
-          {/* <Image
-            style={styles.cameraImg}
-            source={{
-              uri: 'https://firebasestorage.googleapis.com/v0/b/unify-bc2ad.appspot.com/o/38v5caacm9d-388%3A113?alt=media&token=59ce58d5-54e1-4843-a1ff-6f53d2a75f8b',
-            }}
-            resizeMode="center"
-          /> */}
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
 
-export default Chat;
-
+//UI Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //display: "flex",
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
     padding: 7,
     backgroundColor: 'rgba(41,47,63,1)',
     shadowColor: 'rgba(24,48,63,0.5)',
-    //elevation: 10,
     shadowOffset: {width: 40, height: 40},
     width: windowWidth,
     height: windowHeight,
   },
+
   grpTitleView: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    //paddingTop: 5,
     width: '100%',
     height: '9%',
     justifyContent: 'flex-start',
     borderBottomWidth: 1 / 2,
     borderBottomColor: 'rgba(255, 255, 255, 0.4)',
-    //backgroundColor: '#fff',
-    //marginBottom: 623,
   },
+
   avatarView: {
     width: '14%',
     height: '92%',
-    //marginLeft: 5,
     justifyContent: 'flex-start',
     alignItems: 'center',
     borderRadius: 100,
   },
+
   avatar: {
     width: '100%',
     height: '100%',
-    //marginLeft: 5,
     justifyContent: 'flex-start',
     alignItems: 'center',
     borderRadius: 100,
   },
+
   userName: {
     width: '86%',
     fontSize: 18,
@@ -406,8 +331,8 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    //textTransform: 'capitalize',
   },
+
   chatFrameView: {
     display: 'flex',
     width: '100%',
@@ -415,7 +340,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
     flexDirection: 'column',
-    //backgroundColor: "rgba(41,47,63,1)",
   },
 
   grpFeatureView: {
@@ -425,12 +349,9 @@ const styles = StyleSheet.create({
     height: '8%',
     marginBottom: 5,
   },
+
   inputView: {
-    //paddingTop: 10,
-    //paddingBottom: 11,
     paddingLeft: 10,
-    //paddingRight: 2,
-    //padding: 7,
     marginLeft: 3,
     marginRight: 7,
     borderRadius: 10,
@@ -441,6 +362,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   inputText: {
     fontSize: 14,
     fontFamily: 'Helvetica, sans-serif',
@@ -478,21 +400,19 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   },
+
   cameraImg: {
     width: 20,
     height: 18,
   },
 
   buttonSentImg: {
-    //position: "absolute",
     width: 40,
     height: 40,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
-
-  //MessageBubble
 
   messageBubble: {
     borderRadius: 5,
@@ -521,3 +441,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default Chat;

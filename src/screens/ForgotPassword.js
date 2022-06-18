@@ -1,13 +1,13 @@
 import React from "react"
-import { StyleSheet, Image, Text, View, 
-  ImageBackground, 
+
+import { StyleSheet, Text, View, 
   ScrollView, 
   TextInput, 
   SafeAreaView, 
   TouchableOpacity,
   Dimensions, } from "react-native"
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import Feather from 'react-native-vector-icons/Feather'
+
+ import Feather from 'react-native-vector-icons/Feather'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -46,7 +46,6 @@ export default function ForgotPassword({navigation}) {
           />
       </View>
 
-      
       <TouchableOpacity style={styles.buttonView}
         onPress={() => navigation.navigate('ResetPassword')}>
         <Text style={styles.buttonText}>Send Email</Text>
@@ -64,19 +63,17 @@ export default function ForgotPassword({navigation}) {
   )
 }
 
+//UI Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "center",
-    
     paddingLeft: 10,
     paddingRight: 10,
     backgroundColor: "rgba(41,47,63,1)",
     shadowColor: "rgba(24,48,63,0.5)",
-    //elevation: 10,
     shadowOffset: { width: 40, height: 40 },
     width: windowWidth,
     height: windowHeight,
@@ -86,18 +83,16 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    //paddingTop: 5,
     width: '100%',
     height: 50,
     justifyContent: 'flex-start',
-    //backgroundColor: '#fff',
-    //marginBottom: 623,
   },
 
   buttonBack: {
       width: 50,
       height: 45,
   },
+
   title: {
     fontSize: 32,
     fontFamily: "Poppins, sans-serif",
@@ -111,6 +106,7 @@ const styles = StyleSheet.create({
     marginTop: 80,
     marginBottom: 10,
   },
+
   inputView: {
     display: "flex",
     flexDirection: "row",
@@ -118,13 +114,12 @@ const styles = StyleSheet.create({
     height: 50,
     padding: 5, 
     marginTop: 15,
-    //marginBottom: 15,
     justifyContent: "flex-start",
     alignItems: "center",
-    
     borderRadius: 8,
     backgroundColor: "rgba(255, 255, 255, 1)",
   },
+
   inputText: {
     fontSize: 13,
     fontFamily: "Poppins, sans-serif",
@@ -133,13 +128,11 @@ const styles = StyleSheet.create({
     width: '90%',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    //lineHeight: 20,
     fontStyle: 'normal',
   },
 
   noticeView: {
     width: '100%',
-    //height: 25,
     marginTop: 15,
     marginBottom: 15,
     flexDirection: 'row',
@@ -148,15 +141,12 @@ const styles = StyleSheet.create({
   
   forgotPassView: {
     width: '100%',
-    //height: 25,
     marginTop: 30,
     marginBottom: 15,
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  questionText: {
-    //position: 'absolute',
-    
+  questionText: {    
     fontFamily: "Poppins, sans-serif",
     fontWeight: "200",
     fontStyle: 'normal',
@@ -165,9 +155,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
-
     color: '#FFFFFF',
   },
+
   onClickText: {
     fontFamily: "Poppins, sans-serif",
     fontWeight: "bold",
@@ -177,9 +167,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
-
     color: '#0865D3',
   },
+
   buttonView: {
     display: "flex",
     flexDirection: "column",
@@ -188,15 +178,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: '50%',
     height: 50,
-    //paddingTop: 7,
-    //paddingBottom: 11,
-    //paddingLeft: 32,
-    //paddingRight: 32.15,
-    //marginBottom: 28,
     marginTop: 36,
     borderRadius: 13.06,
     backgroundColor: "rgba(0,172,131,1)",
   },
+
   buttonText: {
     fontSize: 16,
     fontFamily: "Poppins, sans-serif",
@@ -206,6 +192,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: 'center',
     textTransform: 'uppercase',
-    //backgroundColor: '#000',
   },
 })
