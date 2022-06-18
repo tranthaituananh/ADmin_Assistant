@@ -168,7 +168,7 @@ const SignUp = props => {
         ) : null}
 
         <View style={styles.questionView}>
-          <Text style={styles.questionText}>I agree to the UNICEF</Text>
+          <Text style={styles.questionText}>I agree to ADmin Assistant</Text>
           <Text style={styles.onClickText}> Terms and Conditions</Text>
         </View>
 
