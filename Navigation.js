@@ -12,6 +12,9 @@ import Loading from './src/screens/Loading';
 
 const Stack = createNativeStackNavigator();
 
+import {createDrawerNavigator} from '@react-navigation/drawer';
+const Drawer = createDrawerNavigator();
+
 const Navigation = props => {
   return (
     <NavigationContainer>

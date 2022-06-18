@@ -41,19 +41,19 @@ const SignUp = props => {
     if (!email) {
       setError('Email required *');
       setValid(false);
-      ToastAndroid.show(error, ToastAndroid.LONG);
+      ToastAndroid.show(error, ToastAndroid.SHORT);
       return;
     }
     if (!password && password.trim() && password.length > 6) {
       setError('Weak password, minimum 5 chars');
       setValid(false);
-      ToastAndroid.show(error, ToastAndroid.LONG);
+      ToastAndroid.show(error, ToastAndroid.SHORT);
       return;
     }
     if (!__isValidEmail(email)) {
       setError('Invalid Email');
       setValid(false);
-      ToastAndroid.show(error, ToastAndroid.LONG);
+      ToastAndroid.show(error, ToastAndroid.SHORT);
       return;
     }
 

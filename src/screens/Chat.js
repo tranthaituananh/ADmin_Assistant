@@ -298,7 +298,7 @@ const Chat = props => {
                   if (error) {
                     console.error(error);
                   } else {
-                    console.log('Alan res: ', result);
+                    //console.log('Alan res: ', result);
                   }
                 },
               );
@@ -314,7 +314,9 @@ const Chat = props => {
 
         {/* <TouchableOpacity
           style={styles.buttonFeature}
-          // onPress={() => this.props.navigation.navigate('Voice')}
+          onPress={() => {
+            AlanManager.activate();
+          }}
         >
           <Image
             style={styles.MdiMicrophone}

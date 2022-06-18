@@ -40,16 +40,16 @@ const SignIn = props => {
     if (!email) {
       setError('Email required *');
       setValid(false);
-      ToastAndroid.show('Please type email', ToastAndroid.LONG);
+      ToastAndroid.show('Please type email', ToastAndroid.SHORT);
       return;
     } else if (!password && password.trim() && password.length > 6) {
       setError('Weak password, minimum 5 chars');
-      ToastAndroid.show(error, ToastAndroid.LONG);
+      ToastAndroid.show(error, ToastAndroid.SHORT);
       setValid(false);
       return;
     } else if (!__isValidEmail(email)) {
       setError('Invalid Email');
-      ToastAndroid.show(error, ToastAndroid.LONG);
+      ToastAndroid.show(error, ToastAndroid.SHORT);
       setValid(false);
       return;
     }
