@@ -1,7 +1,11 @@
-// Loading.js
 import React from 'react';
-import {View, Text, ActivityIndicator, StyleSheet} from 'react-native';
 import auth from '@react-native-firebase/auth';
+
+import {
+  View, 
+  Text, 
+  ActivityIndicator, 
+  StyleSheet} from 'react-native';
 
 export default class Loading extends React.Component {
   componentDidMount() {
@@ -19,6 +23,7 @@ export default class Loading extends React.Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

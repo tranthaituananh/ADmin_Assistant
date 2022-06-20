@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
-import {
+import React, {
+  useState} from 'react';
+
+  import {
   StyleSheet,
-  Image,
   Text,
   View,
-  ImageBackground,
   ScrollView,
   TextInput,
   SafeAreaView,
@@ -13,10 +13,9 @@ import {
   Alert,
   ToastAndroid,
 } from 'react-native';
+
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
-import Navigation from '../../Navigation';
-
 import auth from '@react-native-firebase/auth';
 
 const windowWidth = Dimensions.get('window').width;
@@ -66,7 +65,7 @@ const SignIn = props => {
       let response = await auth().signInWithEmailAndPassword(email, password);
       if (response && response.user) {
         ToastAndroid.show('Login successfully', ToastAndroid.SHORT);
-        // Alert.alert('Success ✅', 'Login successfully');
+        Alert.alert('Success ✅', 'Login successfully');
         props.navigation.navigate('Chat');
       }
     } catch (e) {
@@ -155,22 +154,21 @@ const SignIn = props => {
   );
 };
 
+//UI Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //display: "flex",
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
-
     padding: 7,
     backgroundColor: 'rgba(41,47,63,1)',
     shadowColor: 'rgba(24,48,63,0.5)',
-    //elevation: 10,
     shadowOffset: {width: 40, height: 40},
     width: windowWidth,
     height: windowHeight,
   },
+
   title: {
     fontSize: 32,
     fontFamily: 'Poppins, sans-serif',
@@ -179,26 +177,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     width: '100%',
-    //height: 60,
     alignItems: 'center',
     marginTop: '27%',
     marginBottom: '15%',
   },
+
   inputView: {
-    //display: "flex",
     flexDirection: 'row',
     width: '100%',
     height: 50,
     paddingLeft: 5,
     paddingRight: 5,
     marginTop: '7%',
-    //bottom: 25,
     justifyContent: 'flex-start',
     alignItems: 'center',
-
     borderRadius: 8,
     backgroundColor: 'rgba(255, 255, 255, 1)',
   },
+
   inputText: {
     fontSize: 13,
     fontFamily: 'Poppins, sans-serif',
@@ -210,9 +206,11 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     fontStyle: 'normal',
   },
+
   errorLabelContainerStyle: {
     marginTop: '5%',
   },
+
   errorTextStyle: {
     color: 'red',
     fontSize: 13,
@@ -220,14 +218,12 @@ const styles = StyleSheet.create({
 
   questionView: {
     width: '100%',
-    //height: 25,
     marginTop: '10%',
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  questionText: {
-    //position: 'absolute',
 
+  questionText: {
     fontFamily: 'Poppins, sans-serif',
     fontWeight: '200',
     fontStyle: 'normal',
@@ -236,9 +232,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
-
     color: '#FFFFFF',
   },
+
   onClickText: {
     fontFamily: 'Poppins, sans-serif',
     fontWeight: '700',
@@ -248,9 +244,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
-
     color: '#0865D3',
   },
+
   buttonView: {
     display: 'flex',
     flexDirection: 'column',
@@ -263,6 +259,7 @@ const styles = StyleSheet.create({
     borderRadius: 13.06,
     backgroundColor: 'rgba(0,172,131,1)',
   },
+
   buttonText: {
     fontSize: 16,
     fontFamily: 'Poppins, sans-serif',
@@ -272,7 +269,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     textTransform: 'uppercase',
-    //backgroundColor: '#000',
   },
 });
 

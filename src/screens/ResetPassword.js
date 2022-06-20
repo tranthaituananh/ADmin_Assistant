@@ -13,8 +13,6 @@ import Feather from 'react-native-vector-icons/Feather'
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-
-
 export default function ResetPassword({navigation}) {
   const confirmReset = () => {
     Alert.alert(
@@ -92,19 +90,17 @@ export default function ResetPassword({navigation}) {
   )
 }
 
+//UI Styles 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
-    alignItems: "center",
-    
+    alignItems: "center",    
     paddingLeft: 10,
     paddingRight: 10,
     backgroundColor: "rgba(41,47,63,1)",
     shadowColor: "rgba(24,48,63,0.5)",
-    //elevation: 10,
     shadowOffset: { width: 40, height: 40 },
     width: windowWidth,
     height: windowHeight,
@@ -119,12 +115,9 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    //paddingTop: 5,
     width: '100%',
     height: 50,
     justifyContent: 'flex-start',
-    //backgroundColor: '#fff',
-    //marginBottom: 623,
   },
 
   buttonBack: {
@@ -145,6 +138,7 @@ const styles = StyleSheet.create({
     marginTop: 80,
     marginBottom: 60,
   },
+
   inputView: {
     display: "flex",
     flexDirection: "row",
@@ -152,13 +146,12 @@ const styles = StyleSheet.create({
     height: 50,
     padding: 5, 
     marginTop: 15,
-    //bottom: 25,
     justifyContent: "flex-start",
     alignItems: "center",
-    
     borderRadius: 8,
     backgroundColor: "rgba(255, 255, 255, 1)",
   },
+
   inputText: {
     fontSize: 13,
     fontFamily: "Poppins, sans-serif",
@@ -167,11 +160,9 @@ const styles = StyleSheet.create({
     width: '90%',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    //lineHeight: 20,
     fontStyle: 'normal',
   },
 
-  
   forgotPassView: {
     width: '100%',
     height: 25,
@@ -179,9 +170,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  questionText: {
-    //position: 'absolute',
-    
+
+  questionText: {    
     fontFamily: "Poppins, sans-serif",
     fontWeight: "200",
     fontStyle: 'normal',
@@ -190,9 +180,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
-
     color: '#FFFFFF',
   },
+
   onClickText: {
     fontFamily: "Poppins, sans-serif",
     fontWeight: "bold",
@@ -202,9 +192,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
-
     color: '#0865D3',
   },
+
   buttonView: {
     display: "flex",
     flexDirection: "column",
@@ -213,15 +203,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: '50%',
     height: 50,
-    //paddingTop: 7,
-    //paddingBottom: 11,
-    //paddingLeft: 32,
-    //paddingRight: 32.15,
-    //marginBottom: 28,
     marginTop: 36,
     borderRadius: 13.06,
     backgroundColor: "rgba(0,172,131,1)",
   },
+
   buttonText: {
     fontSize: 16,
     fontFamily: "Poppins, sans-serif",
@@ -231,6 +217,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: 'center',
     textTransform: 'uppercase',
-    //backgroundColor: '#000',
   },
 })
