@@ -1,7 +1,6 @@
-import React, {
-  Component} from 'react';
+import React, {Component} from 'react';
 
-  import {
+import {
   StyleSheet,
   Text,
   View,
@@ -11,12 +10,14 @@ import React, {
   Dimensions,
   Image,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 
 import Tts from 'react-native-tts';
 import Slider from '@react-native-community/slider';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ModalItem from './component/ModalItem';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -30,6 +31,7 @@ export default class ReadText extends Component<Props> {
     speechRate: 0.5,
     speechPitch: 1,
     text: '',
+    isModalVisible: false,
   };
 
   constructor(props) {
@@ -136,19 +138,36 @@ export default class ReadText extends Component<Props> {
     );
   };
 
+  changeModalVisibility = boolean => {
+    this.setState({isModalVisible: boolean});
+  };
+
   render() {
     return (
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {opacity: this.state.isModalVisible ? 0.8 : null},
+        ]}>
         <View style={styles.grpTitleView}>
           <TouchableOpacity
             style={styles.avatarView}
-            onPress={() => this.props.navigation.navigate('Chat')}>
+            onPress={() => this.changeModalVisibility(true)}>
             <Image
               style={styles.avatar}
               source={require('../image/logoApp.png')}
             />
           </TouchableOpacity>
-
+          <Modal
+            transparent={true}
+            animationType="fade"
+            visible={this.state.isModalVisible}
+            onRequestClose={() => this.changeModalVisibility(false)}>
+            <ModalItem
+              changeModalVisibility={this.changeModalVisibility}
+              navigate={this.props.navigation.navigate}
+            />
+          </Modal>
           <Text style={styles.userName}>ADmin Assistant</Text>
         </View>
 

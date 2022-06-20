@@ -13,6 +13,7 @@ import {
   Linking,
   Alert,
   RefreshControl,
+  Modal,
 } from 'react-native';
 
 import Feather from 'react-native-vector-icons/Feather';
@@ -20,14 +21,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AlanView} from '@alan-ai/alan-sdk-react-native';
 import {NativeEventEmitter, NativeModules} from 'react-native';
 import Message from './component/Message';
+import ModalItem from './component/ModalItem';
 
 const {AlanManager, AlanEventEmitter} = NativeModules;
 const alanEventEmitter = new NativeEventEmitter(AlanEventEmitter);
 const alanKey =
   '087ceaf34fe1d0396eac8ce8d828fcfd2e956eca572e1d8b807a3e2338fdd0dc/stage';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-const number = '+84 795164691';
 
 //Mở  web theo url mà người dùng đưa vào bằng giọng nói
 const openURL = async url => {
@@ -45,7 +47,7 @@ const wait = timeout => {
 
 const Chat = props => {
   const [messages, setMessages] = useState([]);
-  const [isLeft, setIsLeft] = useState(true);
+  // const [isLeft, setIsLeft] = useState(true);
   const user = useRef(0);
   const scrollView = useRef();
 
@@ -82,10 +84,6 @@ const Chat = props => {
       name: 'uit',
       url: 'https://play.google.com/store/apps/details?id=app.uit.edu.uit ',
     },
-    {
-      name: `call ${number}`,
-      url: `tel:${number}`,
-    },
   ]);
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -98,17 +96,34 @@ const Chat = props => {
   const [inputText, setInputText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
 
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const changeModalVisibility = boolean => {
+    setModalVisible(boolean);
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, {opacity: isModalVisible ? 0.8 : null}]}>
       <View style={styles.grpTitleView}>
         <TouchableOpacity
           style={styles.avatarView}
-          onPress={() => props.navigation.navigate('Chat')}>
+          onPress={() => changeModalVisibility(true)}>
           <Image
             style={styles.avatar}
             source={require('../image/logoApp.png')}
           />
         </TouchableOpacity>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={isModalVisible}
+          onRequestClose={() => changeModalVisibility(false)}>
+          <ModalItem
+            changeModalVisibility={changeModalVisibility}
+            navigate={props.navigation.navigate}
+          />
+        </Modal>
         <Text style={styles.userName}>ADmin Assistant</Text>
       </View>
 
@@ -409,33 +424,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-
-  messageBubble: {
-    borderRadius: 5,
-    marginTop: 8,
-    marginRight: 10,
-    marginLeft: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    flexDirection: 'row',
-    flex: 1,
-  },
-
-  messageBubbleLeft: {
-    backgroundColor: '#d5d8d4',
-  },
-
-  messageBubbleTextLeft: {
-    color: 'black',
-  },
-
-  messageBubbleRight: {
-    backgroundColor: '#66db30',
-  },
-
-  messageBubbleTextRight: {
-    color: 'white',
   },
 });
 
