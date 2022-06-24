@@ -1,7 +1,6 @@
-import React, {
-  useState} from 'react';
+import React, {useState} from 'react';
 
-  import {
+import {
   StyleSheet,
   Text,
   View,
@@ -69,6 +68,7 @@ const SignIn = props => {
         props.navigation.navigate('Chat');
       }
     } catch (e) {
+      setError('Invalid email or password!');
       ToastAndroid.show('Login failed, please try again', ToastAndroid.SHORT);
       console.error(e.message);
     }
@@ -127,10 +127,10 @@ const SignIn = props => {
         ) : null}
 
         <View style={styles.questionView}>
-          <Text style={styles.questionText}>Forgot Password?</Text>
+          <Text style={styles.questionText}>Reset Password?</Text>
           <Text
             style={styles.onClickText}
-            onPress={() => props.navigation.navigate('ForgotPassword')}>
+            onPress={() => props.navigation.navigate('ResetPassword')}>
             {' '}
             Click Here
           </Text>

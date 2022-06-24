@@ -10,6 +10,7 @@ import {
   Dimensions,
   Alert,
   ToastAndroid,
+  Linking,
 } from 'react-native';
 
 import Feather from 'react-native-vector-icons/Feather';
@@ -19,6 +20,18 @@ import uuid from 'react-native-uuid';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+const term =
+  'https://www.termsfeed.com/live/fe4a0d74-7fa6-40ce-8684-fc9857434ea6';
+
+const openURL = async url => {
+  const isSupported = await Linking.canOpenURL(url);
+  if (isSupported) {
+    await Linking.openURL(url);
+  } else {
+    Alert.alert(`Can't open this URL: ${url}!`);
+  }
+};
 
 const SignUp = props => {
   const [name, setName] = useState('');
@@ -41,7 +54,7 @@ const SignUp = props => {
       ToastAndroid.show(error, ToastAndroid.SHORT);
       return;
     }
-    if (!password && password.trim() && password.length > 6) {
+    if (!password && password.trim() && password.length < 6) {
       setError('Weak password, minimum 5 chars');
       setValid(false);
       ToastAndroid.show(error, ToastAndroid.SHORT);
@@ -53,7 +66,6 @@ const SignUp = props => {
       ToastAndroid.show(error, ToastAndroid.SHORT);
       return;
     }
-
     __doCreateUser(email, password);
   };
 
@@ -64,7 +76,7 @@ const SignUp = props => {
     }
     let data = {
       id: uuid.v4(),
-      name: name,
+      fullname: name,
       email: email,
       password: password,
     };
@@ -74,7 +86,7 @@ const SignUp = props => {
         'https://console.firebase.google.com/u/0/project/admin-assistant-d4922/database/admin-assistant-d4922-default-rtdb/data/~2F',
       )
       .ref('/users/' + data.uuid)
-      .push(data)
+      .set(data)
       .then(ToastAndroid.show('Register successfully!', ToastAndroid.SHORT));
   };
 
@@ -87,10 +99,10 @@ const SignUp = props => {
       if (response && response.user) {
         ToastAndroid.show('Register successfully!', ToastAndroid.SHORT);
         props.navigation.navigate('SignIn');
-        Alert.alert('Success ✅', 'Account created successfully');
         savedUser();
       }
     } catch (e) {
+      setError('Weak password, should be at least 6 chars');
       console.error(e.message);
     }
   };
@@ -151,8 +163,11 @@ const SignUp = props => {
             style={styles.inputText}
             autoCapitalize="none"
             value={password}
+            onChangeText={text => {
+              setError;
+              setPassword(text);
+            }}
             error={isValid}
-            onChangeText={text => setPassword(text)}
             secureTextEntry
             onFocus={() => setIsFocused(true)}
             onBlur={() => {
@@ -169,7 +184,9 @@ const SignUp = props => {
 
         <View style={styles.questionView}>
           <Text style={styles.questionText}>I agree to ADmin Assistant</Text>
-          <Text style={styles.onClickText}> Terms and Conditions</Text>
+          <TouchableOpacity onPress={() => openURL(term)}>
+            <Text style={styles.onClickText}> Terms and Conditions</Text>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity style={styles.buttonView} onPress={_doSignUp}>

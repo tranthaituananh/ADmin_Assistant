@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import auth from '@react-native-firebase/auth';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -20,7 +21,9 @@ const screen = [
 const ModalItem = props => {
   const onPressItem = des => {
     props.changeModalVisibility(false);
-    props.navigate(des);
+    auth().onAuthStateChanged(user => {
+      props.navigate(des);
+    });
   };
   const option = screen.map((item, index) => {
     return (

@@ -241,16 +241,7 @@ const Chat = props => {
               },
             ]}
             onPress={() => {
-              messages.push({user: 0, content: inputText}),
-                messages.map((message, index) => (
-                  <Message
-                    key={index}
-                    time={message.time}
-                    isLeft={message.user !== user.current}
-                    message={message.content}
-                  />
-                ));
-              setInputText('');
+              messages.push({user: 0, content: inputText}), setInputText('');
               AlanManager.activate();
               AlanManager.callProjectApi(
                 'handleText',
@@ -258,8 +249,6 @@ const Chat = props => {
                 (error, result) => {
                   if (error) {
                     console.error(error);
-                  } else {
-                    //console.log('Alan res: ', result);
                   }
                 },
               );
