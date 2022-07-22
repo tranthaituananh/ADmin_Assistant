@@ -1,4 +1,4 @@
-# My Money
+# ADmin Assistant
 The final project of Specialized project (Đồ án cuối kỳ môn Đồ án chuyên ngành)
 
 ## English  
